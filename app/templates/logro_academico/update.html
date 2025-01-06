@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Editar logro académico{% endblock %}
+
+{% block content %}
+<main class="main-content" id="main-content">
+    <div class="header">
+        <button class="toggle-sidebar" id="toggle-sidebar" aria-label="Mostrar/Ocultar barra lateral">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div>
+            <h1 class="text-title">Logro académico</h1>
+            <small class="text-subtitle">Gestión de logros académicos.</small>
+        </div>
+    </div>
+
+    <form method="POST">
+        <div class="form-grid">
+            <div class="input-group">
+                <input type="text" id="logro" name="logro" placeholder="Logro académico" value="{{ logro_academico['logro'] }}">
+                <i class="fas fa-microphone" onclick="startRecognition('logro')"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="observacion" name="observacion" placeholder="Observación" value="{{ logro_academico['observacion'] }}">
+                <i class="fas fa-microphone" onclick="startRecognition('observacion')"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="hoja_vida" id="hoja_vida" class="custom-select">
+                    <option value="" disabled>Seleccione un hoja de vida...</option>
+                    {% for hoja_vida in hojas_vida %}
+                    <option value="{{ hoja_vida['id'] }}" {% if hoja_vida['id']==(logro_academico['hoja_vida_id']|int) %}selected{% endif %}>
+                        {{ hoja_vida['materia'] }} | {{hoja_vida['nombres']}} {{ hoja_vida['apellidos'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Actualizar
+            </button>
+            <a href="{{ url_for('logro_academico.index') }}" class="btn btn-danger">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</main>
+{% endblock %}

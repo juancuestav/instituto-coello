@@ -1,0 +1,131 @@
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    background: #f3f3f3;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.input-group i {
+    padding: 10px;
+    background: #fff;
+    color: #007bff;
+}
+
+.input-group i:hover {
+    background: #c1dffe;
+}
+
+.input-group i:last-child {
+    cursor: pointer;
+}
+
+.input-group input {
+    /* border: 1px solid #ddd; */
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    flex: 1;
+    outline: none;
+    font-size: 14px;
+}
+
+/* Select */
+.select-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.custom-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    background-color: white;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+.select-container i {
+    padding: 10px;
+    background: #fff;
+    color: #007bff;
+    border-radius: 0 4px 4px 0;
+}
+
+.select-container i:hover {
+    background: #c1dffe;
+}
+
+.select-container i:last-child {
+    cursor: pointer;
+}
+
+.custom-select:focus {
+    outline: none;
+    border-color: #66B032;
+}
+
+/* Para ocultar la flecha nativa en IE */
+.custom-select::-ms-expand {
+    display: none;
+}
+
+/* Estilo para el placeholder */
+.custom-select option:first-child {
+    color: #666;
+}
+
+/* Estilo para las opciones */
+.custom-select option {
+    padding: 8px;
+    color: #333;
+}
+
+.text-title {
+    color: #4f4f4f;
+}
+
+.text-subtitle {
+    color: #898989;
+}
+
+.btn-search {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.flash-messages {
+    margin: 1em 0;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}

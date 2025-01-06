@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="/static/css/inputs.css">
+  <title>Formulario de Registro</title>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Colegio Instituto Coello">
+        <h2>Colegio Instituto Coello</h2>
+      </div>
+      <div class="form-container">
+        <h3>Registro</h3>
+        <form id="registerForm" method="POST" action="/register">
+          <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" name="nombre" placeholder="Nombre completo" required>
+          </div>
+          <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" name="email" placeholder="Correo electrónico" required>
+          </div>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" placeholder="Contraseña" required>
+          </div>
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="confirm_password" placeholder="Confirmar contraseña" required>
+          </div>
+          <button type="submit" class="btn">Registrarse</button>
+        </form>
+        <p>¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

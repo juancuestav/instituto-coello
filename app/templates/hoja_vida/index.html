@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Hojas de Vida{% endblock %}
+
+{% block content %}
+<main class="main-content" id="main-content">
+    <div class="header">
+        <button class="toggle-sidebar" id="toggle-sidebar" aria-label="Mostrar/Ocultar barra lateral">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div>
+            <h1 class="text-title">Hojas de vida</h1>
+            <small class="text-subtitle">Gestión de hojas de vida.</small>
+        </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('hoja_vida.index') }}">
+        <div class="form-grid">
+            <div class="input-group">
+                <input type="text" id="cedula" name="cedula" placeholder="Cédula"
+                    value="{{ request.form.get('cedula', '') }}" required>
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="nombres" name="nombres" placeholder="Nombres"
+                    value="{{ request.form.get('nombres', '') }}" required>
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="apellidos" name="apellidos" placeholder="Apellidos"
+                    value="{{ request.form.get('apellidos', '') }}" required>
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="direccion" name="direccion" placeholder="Dirección"
+                    value="{{ request.form.get('direccion', '') }}" required>
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="telefono" name="telefono" placeholder="Teléfono"
+                    value="{{ request.form.get('telefono', '') }}" required>
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder="Email"
+                    value="{{ request.form.get('email', '') }}" required>
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="docente" id="docente" class="custom-select">
+                    <option value="" disabled>Seleccione un docente...</option>
+                    {% for docente in docentes %}
+                    <option value="{{ docente['id'] }}" {% if docente['id']==(request.form.get('docente', '' )|int)
+                        %}selected{% endif %}>
+                        {{ docente['nombre'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="inspector_piso" id="inspector_piso" class="custom-select">
+                    <option value="" disabled>Seleccione un inspector de piso...</option>
+                    {% for inspector in inspectores_piso %}
+                    <option value="{{ inspector['id'] }}" {% if inspector['id']==(request.form.get('inspector_piso', ''
+                        )|int) %}selected{% endif %}>
+                        {{ inspector['nombre'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="psicologo" id="psicologo" class="custom-select">
+                    <option value="" disabled>Seleccione un psicologo...</option>
+                    {% for psicologo in psicologos %}
+                    <option value="{{ psicologo['id'] }}" {% if psicologo['id']==(request.form.get('psicologo', ''
+                        )|int) %}selected{% endif %}>
+                        {{ psicologo['nombre'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="materia" id="materia" class="custom-select">
+                    <option value="" disabled>Seleccione una materia...</option>
+                    {% for materia in materias %}
+                    <option value="{{ materia['id'] }}" {% if materia['id']==(request.form.get('materia', '' )|int)
+                        %}selected{% endif %}>
+                        {{ materia['nombre_materia'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="curso" id="curso" class="custom-select">
+                    <option value="" disabled>Seleccione una curso...</option>
+                    {% for curso in cursos %}
+                    <option value="{{ curso['id'] }}" {% if curso['id']==(request.form.get('curso', '' )|int)
+                        %}selected{% endif %}>
+                        {{ curso['nombre_curso'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="jornada" id="jornada" class="custom-select">
+                    <option value="" disabled>Seleccione una jornada...</option>
+                    {% for jornada in jornadas %}
+                    <option value="{{ jornada['id'] }}" {% if jornada['id']==(request.form.get('jornada', '' )|int)
+                        %}selected{% endif %}>
+                        {{ jornada['nombre_jornada'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+            <button type="button" class="btn btn-danger">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </form>
+
+    <div>
+        <br><br>
+        <h2 class="text-title">Listado de hojas de vida</h2><br>
+        <form class="search-containers" method="GET" action="{{ url_for('hoja_vida.buscar') }}">
+            <div class="input-group">
+                <input type="text" name="frase" class="search-input" placeholder="Buscar por medio de una frase">
+                <i class="fas fa-microphone select-icon"></i>
+                <button type="submit" class="btn btn-search">
+                    <span class="fas fa-search"></span> Buscar
+                </button>
+            </div>
+        </form>
+
+        <br>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Cédula</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <!-- <th>Dirección</th> -->
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>Materia</th>
+                        <th>Docente</th>
+                        <th>Inspector de piso</th>
+                        <th>Piscólogo</th>
+                        <th>Gestionar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hoja in hojas_vida %}
+                    <tr>
+                        <td>{{ hoja['id'] }}</td>
+                        <td>{{ hoja['cedula'] }}</td>
+                        <td>{{ hoja['nombres'] }}</td>
+                        <td>{{ hoja['apellidos'] }}</td>
+                        <!-- <td>{{ hoja['direccion'] }}</td> -->
+                        <td>{{ hoja['telefono'] }}</td>
+                        <td>{{ hoja['email'] }}</td>
+                        <td>{{ hoja['materia'] }}</td>
+                        <td>{{ hoja['docente'] }}</td>
+                        <td>{{ hoja['inspector_piso'] }}</td>
+                        <td>{{ hoja['psicologo'] }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ url_for('hoja_vida.editar', id=hoja['id']) }}" class="action-btn"
+                                    aria-label="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{{ url_for('hoja_vida.imprimir', id=hoja['id']) }}" class="action-btn"
+                                    aria-label="Imprimir">
+                                    <i class="fas fa-print"></i> <small>Observaciones</small>
+                                </a>
+                                <a href="{{ url_for('logro_academico.imprimir', id=hoja['id']) }}" class="action-btn"
+                                    aria-label="Imprimir">
+                                    <i class="fas fa-print"></i> <small>Logros</small>
+                                </a>
+                                <form action="{{ url_for('hoja_vida.eliminar', id=hoja['id']) }}" method="POST"
+                                    style="display:inline;">
+                                    <button type="submit" class="action-btn delete" aria-label="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+{% endblock %}

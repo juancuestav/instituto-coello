@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inputs.css') }}">
+    <title>Inicio de Sesión</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Colegio Instituto Coello">
+                <h2>Colegio Instituto Coello</h2>
+            </div>
+            <div class="form-container">
+                <h3>Inicio de Sesión</h3>
+                <form id="loginForm" method="POST" action="/login">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" placeholder="Correo electrónico" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Contraseña" required>
+                        <i id="ojo" class="fas fa-eye" onclick="togglePasswordVisibility()"></i>
+                    </div>
+                    <button type="submit" class="btn">Iniciar</button>
+                </form>
+                <p>¿No tienes una cuenta? <a href="/register">Regístrate</a></p>
+
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para mostrar/ocultar la contraseña
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const ojoIcon = document.getElementById('ojo');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                ojoIcon.classList.remove('fa-eye');
+                ojoIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                ojoIcon.classList.remove('fa-eye-slash');
+                ojoIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+
+</html>

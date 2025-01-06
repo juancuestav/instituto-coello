@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Hoja de Vida{% endblock %}
+
+{% block content %}
+<main class="main-content" id="main-content">
+    <div class="header">
+        <button class="toggle-sidebar" id="toggle-sidebar" aria-label="Mostrar/Ocultar barra lateral">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div>
+            <h1 class="text-title">Editar Curso</h1>
+            <small class="text-subtitle">Gestión de cursos.</small>
+        </div>
+    </div>
+
+    <form method="POST">
+        <div class="form-grid">
+            <div class="input-group">
+                <input type="text" id="cedula" name="cedula" placeholder="Cédula" value="{{ hoja_vida['cedula'] }}">
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="nombres" name="nombres" placeholder="Nombres" value="{{ hoja_vida['nombres'] }}">
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="apellidos" name="apellidos" placeholder="Apellidos"
+                    value="{{ hoja_vida['apellidos'] }}">
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="direccion" name="direccion" placeholder="Dirección"
+                    value="{{ hoja_vida['direccion'] }}">
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="telefono" name="telefono" placeholder="Teléfono"
+                    value="{{ hoja_vida['telefono'] }}">
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder="Email" value="{{ hoja_vida['email'] }}">
+                <i class="fas fa-microphone"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="docente" id="docente" class="custom-select">
+                    <option value="" disabled>Seleccione un docente...</option>
+                    {% for docente in docentes %}
+                    <option value="{{ docente['id'] }}" {% if docente['id']==hoja_vida['docente_id'] %}selected{% endif
+                        %}>
+                        {{ docente['nombre'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="inspector_piso" id="inspector_piso" class="custom-select">
+                    <option value="" disabled>Seleccione un inspector de piso...</option>
+                    {% for docente in docentes %}
+                    <option value="{{ docente['id'] }}" {% if docente['id']==hoja_vida['inspector_piso_id'] %}selected{%
+                        endif %}>
+                        {{ docente['nombre'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="psicologo" id="psicologo" class="custom-select">
+                    <option value="" disabled>Seleccione un psicologo...</option>
+                    {% for docente in docentes %}
+                    <option value="{{ docente['id'] }}" {% if docente['id']==hoja_vida['psicologo_id'] %}selected{%
+                        endif %}>
+                        {{ docente['nombre'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="materia" id="materia" class="custom-select">
+                    <option value="" disabled>Seleccione una materia...</option>
+                    {% for materia in materias %}
+                    <option value="{{ materia['id'] }}" {% if materia['id']==hoja_vida['materia_id'] %}selected{% endif
+                        %}>
+                        {{ materia['nombre_materia'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="curso" id="curso" class="custom-select">
+                    <option value="" disabled>Seleccione un curso...</option>
+                    {% for curso in cursos %}
+                    <option value="{{ curso['id'] }}" {% if curso['id']==hoja_vida['curso_id'] %}selected{% endif %}>
+                        {{ curso['nombre_curso'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="jornada" id="jornada" class="custom-select">
+                    <option value="" disabled>Seleccione una jornada...</option>
+                    {% for jornada in jornadas %}
+                    <option value="{{ jornada['id'] }}" {% if jornada['id']==hoja_vida['jornada_id'] %}selected{% endif
+                        %}>
+                        {{ jornada['nombre_jornada'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Actualizar</button>
+            <a href="{{ url_for('hoja_vida.index') }}" class="btn btn-danger">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </form>
+</main>
+{% endblock %}

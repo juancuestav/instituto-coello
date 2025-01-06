@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla Hoja de Vida</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            /* Formato horizontal */
+            margin: 20mm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .styled-table td,
+        .styled-table th {
+            border: 1px solid #000;
+            padding: 4px;
+        }
+
+        .header-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .bg-grey {
+            background-color: #f0f0f0;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <table class="styled-table">
+        <tr class="bg-grey">
+            <td align="center">
+                <img src="{{ url_for('static', filename='images/logo.png', _external=True) }}"
+                    alt="Logo Colegio Instituto Coello" width="100px">
+            </td>
+            <td colspan="4" class="header-title">UNIDAD EDUCATIVA - PARTICULAR <br> INSTITUTO COELLO <br> HOJA DE VIDA
+                DE LOS ESTUDIANTES</td>
+            <td>.</td>
+        </tr>
+        <tr>
+            <td class="text-bold bg-grey">ESTUDIANTE:</td>
+            <td colspan="3">{{ (hoja_vida['apellidos'] + ' ' + hoja_vida['nombres']) | upper}}</td>
+            <td class="text-bold bg-grey">CURSO:</td>
+            <td>{{ hoja_vida['curso'] | upper }}</td>
+        </tr>
+        <tr>
+            <td class="text-bold bg-grey">REPRESENTANTE:</td>
+            <td colspan="3">.</td>
+            <td class="text-bold bg-grey">TELEFONO:</td>
+            <td>{{ hoja_vida['telefono'] }}</td>
+        </tr>
+        <tr class="bg-grey">
+            <td class="text-bold">FECHA</td>
+            <td class="text-bold">DOCENTE</td>
+            <td class="text-bold">MATERIA</td>
+            <td class="text-bold">OBSERVACION</td>
+            <td class="text-bold">PSICOLOGO</td>
+            <td class="text-bold">REPRESENTANTE</td>
+        </tr>
+        {% for observacion in observaciones %}
+        <tr>
+            <td>{{ observacion['fecha'] }}</td>
+            <td>{{ observacion['docente'] | upper }}</td>
+            <td>{{ observacion['materia'] | upper }}</td>
+            <td>{{ observacion['detalle_observacion'] | upper }}</td>
+            <td>{{ observacion['psicologo'] | upper }}</td>
+            <td>.</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Editar usuario{% endblock %}
+
+{% block content %}
+<main class="main-content" id="main-content">
+    <div class="header">
+        <button class="toggle-sidebar" id="toggle-sidebar" aria-label="Mostrar/Ocultar barra lateral">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div>
+            <h1 class="text-title">Usuarios</h1>
+            <small class="text-subtitle">Gestión de usuarios.</small>
+        </div>
+    </div>
+
+    <form method="POST">
+        <div class="form-grid">
+            <div class="input-group">
+                <input type="text" name="nombre" id="nombre" placeholder="Nombre completo"
+                    value="{{ usuario['nombre'] }}" required>
+                <i class="fas fa-microphone" onclick="startRecognition('nombre')"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="email" name="email" name="email" placeholder="Correo electrónico"
+                    value="{{ usuario['email'] }}" required>
+                <i class="fas fa-microphone" onclick="startRecognition('email')"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Contraseña" value="{{ usuario['password'] }}">
+            </div>
+
+            <div class="select-container">
+                <select name="rol" id="rol" class="custom-select" required>
+                    <option value="" disabled>Seleccione un rol...</option>
+                    {% for rol in roles %}
+                    <option value="{{ rol['id'] }}" {% if rol['id']==(usuario['rol_id']|int) %}selected{%
+                        endif %}>
+                        {{ rol['nombre'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Actualizar
+            </button>
+            <a href="{{ url_for('usuario.index') }}" class="btn btn-danger">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</main>
+{% endblock %}

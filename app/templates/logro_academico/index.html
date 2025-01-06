@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Observaciones{% endblock %}
+
+{% block content %}
+<main class="main-content" id="main-content">
+    <div class="header">
+        <button class="toggle-sidebar" id="toggle-sidebar" aria-label="Mostrar/Ocultar barra lateral">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div>
+            <h1 class="text-title">Observaciones de hojas de vida</h1>
+            <small class="text-subtitle">Gestión de observaciones de hojas de vida.</small>
+        </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('logro_academico.index') }}">
+        <div class="form-grid">
+            <div class="input-group">
+                <input type="text" id="logro" name="logro" placeholder="Logro académico">
+                <i class="fas fa-microphone" onclick="startRecognition('logro')"></i>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="observacion" name="observacion" placeholder="Observación">
+                <i class="fas fa-microphone" onclick="startRecognition('observacion')"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="hoja_vida" id="hoja_vida" class="custom-select">
+                    <option value="" disabled>Seleccione un hoja de vida...</option>
+                    {% for hoja_vida in hojas_vida %}
+                    <option value="{{ hoja_vida['id'] }}" {% if hoja_vida['id']==(request.form.get('hoja_vida', ''
+                        )|int) %}selected{% endif %}>
+                        {{ hoja_vida['materia'] }} | {{hoja_vida['nombres']}} {{ hoja_vida['apellidos'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="buttons">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+            <a href="{{ url_for('logro_academico.index') }}" class="btn btn-danger">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
+    </form>
+
+    <div>
+        <br><br>
+        <h2 class="text-title">Listado de logros académicos</h2><br>
+        <div class="search-containers">
+            <div class="input-group">
+                <input type="text" id="frase" name="frase" class="search-input"
+                    placeholder="Buscar por medio de una frase">
+                <i class="fas fa-microphone" onclick="startRecognition('frase')"></i>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </div><br>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Logro académico</th>
+                        <th>Observación</th>
+                        <th>Hoja de vida</th>
+                        <th>Fecha</th>
+                        <th>Gestionar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for logro in logros_academicos %}
+                    <tr>
+                        <td>{{ logro['id'] }}</td>
+                        <td>{{ logro['logro'] }}</td>
+                        <td>{{ logro['observacion'] }}</td>
+                        <td>{{ logro['hoja_vida'] }}</td>
+                        <td>{{ logro['fecha'] }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ url_for('logro_academico.editar', id=logro['id']) }}" class="action-btn"
+                                    aria-label="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ url_for('logro_academico.eliminar', id=logro['id']) }}" method="POST"
+                                    style="display:inline;">
+                                    <button type="submit" class="action-btn delete" aria-label="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+{% endblock %}

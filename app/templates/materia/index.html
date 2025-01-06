@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Materias{% endblock %}
+
+{% block content %}
+<main class="main-content" id="main-content">
+    <div class="header">
+        <button class="toggle-sidebar" id="toggle-sidebar" aria-label="Mostrar/Ocultar barra lateral">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div>
+            <h1 class="text-title">Materias</h1>
+            <small class="text-subtitle">Gestión de materias.</small>
+        </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('materia.index') }}">
+        <div class="form-grid">
+            <div class="input-group">
+                <input type="text" id="nombre_materia" name="nombre_materia" placeholder="Nombre de la materia">
+                <i class="fas fa-microphone" onclick="startRecognition('nombre_materia')"></i>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+            <a href="{{ url_for('materia.index') }}" class="btn btn-danger">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
+    </form>
+
+    <div>
+        <br><br>
+        <h2 class="text-title">Listado de materias</h2><br>
+        <div class="search-containers">
+            <div class="input-group">
+                <input type="text" id="frase" name="frase" class="search-input"
+                    placeholder="Buscar por medio de una frase">
+                <i class="fas fa-microphone" onclick="startRecognition('frase')"></i>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </div><br>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre del curso</th>
+                        <th>Gestionar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for materia in materias %}
+                    <tr>
+                        <td>{{ materia[0] }}</td>
+                        <td>{{ materia[1] }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ url_for('materia.editar', id=materia[0]) }}" class="action-btn"
+                                    aria-label="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ url_for('materia.eliminar', id=materia[0]) }}" method="POST"
+                                    style="display:inline;">
+                                    <button type="submit" class="action-btn delete" aria-label="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <title>{% block title %}Docentes App{% endblock %}</title>
+    <!-- Enlace a Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inputs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+</head>
+
+<body>
+    <nav class="sidebar" id="sidebar">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+            <div class="school-name">Colegio Instituto Coello</div>
+        </div>
+        <div class="menu">
+            <a href="{{ url_for('hoja_vida.index') }}"
+                class="menu-item {% if request.path == url_for('hoja_vida.index') %}active{% endif %}">
+                <i class="fas fa-file-alt"></i>
+                Hojas de vida
+            </a>
+            <a href="{{ url_for('observacion.index') }}"
+                class="menu-item {% if request.path == url_for('observacion.index') %}active{% endif %}">
+                <i class="fas fa-list"></i>
+                Observaciones
+            </a>
+            <a href="{{ url_for('logro_academico.index') }}"
+                class="menu-item {% if request.path == url_for('logro_academico.index') %}active{% endif %}">
+                <i class="fas fa-star"></i>
+                Logros académicos
+            </a>
+            <a href="{{ url_for('materia.index') }}"
+                class="menu-item {% if request.path == url_for('materia.index') %}active{% endif %}">
+                <i class="fas fa-book"></i>
+                Materias
+            </a>
+            <a href="{{ url_for('curso.index') }}"
+                class="menu-item {% if request.path == url_for('curso.index') %}active{% endif %}">
+                <i class="fas fa-calendar"></i>
+                Cursos
+            </a>
+            <a href="{{ url_for('jornada.index') }}"
+                class="menu-item {% if request.path == url_for('jornada.index') %}active{% endif %}">
+                <i class="fas fa-calendar"></i>
+                Jornadas
+            </a>
+            <a href="{{ url_for('usuario.index') }}"
+                class="menu-item {% if request.path == url_for('usuario.index') %}active{% endif %}">
+                <i class="fas fa-user"></i>
+                Usuarios
+            </a>
+        </div>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const toggleButton = document.getElementById('toggle-sidebar');
+
+            toggleButton.addEventListener('click', function () {
+                sidebar.classList.toggle('hidden');
+                mainContent.classList.toggle('full-width');
+            });
+        });
+
+        // Iniciar reconocimiento de voz para un campo específico
+        function startRecognition(fieldId) {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'es-ES'; // Configurar idioma
+            recognition.onstart = () => console.log('Reconocimiento de voz iniciado');
+            recognition.onerror = (event) => console.error('Error al usar reconocimiento de voz: ', event.error);
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById(fieldId).value = transcript; // Rellenar el campo con lo reconocido
+            };
+            recognition.start();
+        }
+    </script>
+</body>
+
+</html>
