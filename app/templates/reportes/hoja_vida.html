@@ -65,7 +65,7 @@
         </tr>
         <tr>
             <td class="text-bold bg-grey">REPRESENTANTE:</td>
-            <td colspan="3">.</td>
+            <td colspan="3">{{ hoja_vida['representante'] | upper }}</td>
             <td class="text-bold bg-grey">TELEFONO:</td>
             <td>{{ hoja_vida['telefono'] }}</td>
         </tr>
@@ -84,7 +84,7 @@
             <td>{{ observacion['materia'] | upper }}</td>
             <td>{{ observacion['detalle_observacion'] | upper }}</td>
             <td>{{ observacion['psicologo'] | upper }}</td>
-            <td>.</td>
+            <td>{{ observacion['representante'] | upper }}</td>
         </tr>
         {% endfor %}
     </table>

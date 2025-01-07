@@ -49,6 +49,12 @@
                 <i class="fas fa-microphone"></i>
             </div>
 
+            <div class="input-group">
+                <input type="text" id="representante" name="representante" placeholder="Representante"
+                    value="{{ hoja_vida['representante'] }}" required>
+                <i class="fas fa-microphone"></i>
+            </div>
+
             <div class="select-container">
                 <select name="docente" id="docente" class="custom-select">
                     <option value="" disabled>Seleccione un docente...</option>
@@ -65,10 +71,10 @@
             <div class="select-container">
                 <select name="inspector_piso" id="inspector_piso" class="custom-select">
                     <option value="" disabled>Seleccione un inspector de piso...</option>
-                    {% for docente in docentes %}
-                    <option value="{{ docente['id'] }}" {% if docente['id']==hoja_vida['inspector_piso_id'] %}selected{%
-                        endif %}>
-                        {{ docente['nombre'] }}
+                    {% for inspector in inspectores_piso %}
+                    <option value="{{ inspector['id'] }}" {% if inspector['id']==hoja_vida['inspector_piso_id']
+                        %}selected{% endif %}>
+                        {{ inspector['nombre'] }}
                     </option>
                     {% endfor %}
                 </select>
@@ -78,10 +84,10 @@
             <div class="select-container">
                 <select name="psicologo" id="psicologo" class="custom-select">
                     <option value="" disabled>Seleccione un psicologo...</option>
-                    {% for docente in docentes %}
-                    <option value="{{ docente['id'] }}" {% if docente['id']==hoja_vida['psicologo_id'] %}selected{%
+                    {% for psicologo in psicologos %}
+                    <option value="{{ psicologo['id'] }}" {% if psicologo['id']==hoja_vida['psicologo_id'] %}selected{%
                         endif %}>
-                        {{ docente['nombre'] }}
+                        {{ psicologo['nombre'] }}
                     </option>
                     {% endfor %}
                 </select>

@@ -52,8 +52,14 @@
                 <i class="fas fa-microphone"></i>
             </div>
 
+            <div class="input-group">
+                <input type="text" id="representante" name="representante" placeholder="Representante"
+                    value="{{ request.form.get('representante', '') }}" required>
+                <i class="fas fa-microphone"></i>
+            </div>
+
             <div class="select-container">
-                <select name="docente" id="docente" class="custom-select">
+                <select name="docente" id="docente" class="custom-select" required>
                     <option value="" disabled>Seleccione un docente...</option>
                     {% for docente in docentes %}
                     <option value="{{ docente['id'] }}" {% if docente['id']==(request.form.get('docente', '' )|int)
@@ -62,11 +68,11 @@
                     </option>
                     {% endfor %}
                 </select>
-                <i class="fas fa-microphone select-icon"></i>
+                <i class="fas fa-microphone select-icon"></i>   
             </div>
 
             <div class="select-container">
-                <select name="inspector_piso" id="inspector_piso" class="custom-select">
+                <select name="inspector_piso" id="inspector_piso" class="custom-select" required>
                     <option value="" disabled>Seleccione un inspector de piso...</option>
                     {% for inspector in inspectores_piso %}
                     <option value="{{ inspector['id'] }}" {% if inspector['id']==(request.form.get('inspector_piso', ''
@@ -79,7 +85,7 @@
             </div>
 
             <div class="select-container">
-                <select name="psicologo" id="psicologo" class="custom-select">
+                <select name="psicologo" id="psicologo" class="custom-select" required>
                     <option value="" disabled>Seleccione un psicologo...</option>
                     {% for psicologo in psicologos %}
                     <option value="{{ psicologo['id'] }}" {% if psicologo['id']==(request.form.get('psicologo', ''
@@ -92,7 +98,7 @@
             </div>
 
             <div class="select-container">
-                <select name="materia" id="materia" class="custom-select">
+                <select name="materia" id="materia" class="custom-select" required>
                     <option value="" disabled>Seleccione una materia...</option>
                     {% for materia in materias %}
                     <option value="{{ materia['id'] }}" {% if materia['id']==(request.form.get('materia', '' )|int)
@@ -105,7 +111,7 @@
             </div>
 
             <div class="select-container">
-                <select name="curso" id="curso" class="custom-select">
+                <select name="curso" id="curso" class="custom-select" required>
                     <option value="" disabled>Seleccione una curso...</option>
                     {% for curso in cursos %}
                     <option value="{{ curso['id'] }}" {% if curso['id']==(request.form.get('curso', '' )|int)
@@ -118,7 +124,7 @@
             </div>
 
             <div class="select-container">
-                <select name="jornada" id="jornada" class="custom-select">
+                <select name="jornada" id="jornada" class="custom-select" required>
                     <option value="" disabled>Seleccione una jornada...</option>
                     {% for jornada in jornadas %}
                     <option value="{{ jornada['id'] }}" {% if jornada['id']==(request.form.get('jornada', '' )|int)
@@ -135,9 +141,9 @@
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save"></i> Guardar
             </button>
-            <button type="button" class="btn btn-danger">
+            <a href="{{ url_for('hoja_vida.index') }}" class="btn btn-danger">
                 <i class="fas fa-times"></i> Cancelar
-            </button>
+            </a>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=True) %}
@@ -163,6 +169,9 @@
                 <button type="submit" class="btn btn-search">
                     <span class="fas fa-search"></span> Buscar
                 </button>
+                <a href="{{ url_for('hoja_vida.index') }}" class="btn btn-positive">
+                    <span class="fas fa-list"></span> Listar todo
+                </a>
             </div>
         </form>
 

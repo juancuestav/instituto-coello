@@ -30,6 +30,18 @@
                 <i class="fas fa-times"></i> Cancelar
             </a>
         </div>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
     </form>
 
     <div>
@@ -37,7 +49,8 @@
         <h2 class="text-title">Listado de cursos</h2><br>
         <div class="search-containers">
             <div class="input-group">
-                <input type="text" id="frase" name="frase" class="search-input" placeholder="Buscar por medio de una frase">
+                <input type="text" id="frase" name="frase" class="search-input"
+                    placeholder="Buscar por medio de una frase">
                 <i class="fas fa-microphone" onclick="startRecognition('frase')"></i>
             </div>
         </div>

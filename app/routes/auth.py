@@ -34,7 +34,7 @@ def login():
                 session['user_id'] = user['id']
                 session['user_email'] = user['email']
                 flash("Inicio de sesión exitoso.", "success")
-                return redirect(url_for("materia.index"))  # Redirigir a otra parte de la app
+                return redirect(url_for("hoja_vida.index"))  # Redirigir a otra parte de la app
             else:
                 flash("Correo o contraseña incorrectos.", "danger")
         except Exception as e:

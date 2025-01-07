@@ -87,7 +87,7 @@ tables = {
     """,
     "logros_academicos": """
         CREATE TABLE `logros_academicos` (
-        	`id` BIGINT(20) UNSIGNED NOT NULL DEFAULT '0',
+        	`id` BIGINT(20) UNSIGNED AUTO_INCREMENT NOT NULL DEFAULT '0',
         	`logro` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8mb4_0900_ai_ci',
         	`observacion` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
         	`fecha` DATE NULL DEFAULT NULL,

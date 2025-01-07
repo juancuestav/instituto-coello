@@ -30,6 +30,18 @@
                 <i class="fas fa-times"></i> Cancelar
             </a>
         </div>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
     </form>
 </main>
 {% endblock %}

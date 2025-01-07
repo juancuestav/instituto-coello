@@ -155,10 +155,16 @@ select.form-control {
     cursor: pointer;
     font-size: 14px;
     margin-right: 10px;
+    text-decoration: none;
 }
 
 .btn-primary {
     background-color: #007bff;
+    color: white;
+}
+
+.btn-positive {
+    background-color: #66B032;
     color: white;
 }
 
