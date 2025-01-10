@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for, session
 from ..database import Database
-from ..listados import get_hojas_vida
+from ..listados import get_hojas_vida, get_materias
 
 observacion_bp = Blueprint("observacion", __name__)
 
@@ -13,20 +13,23 @@ def index():
         return redirect(url_for("auth.login"))
     
     hojas_vida = get_hojas_vida()
+    materias = get_materias()
 
     if request.method == "POST":
         observacion = request.form.get("observacion")
         hoja_vida = request.form.get("hoja_vida")
+        materia = request.form.get("materia")
 
         if observacion:
             try:
                 conn = Database.get_connection()
                 with conn.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO observaciones (detalle_observacion, hoja_vida_id, fecha) VALUES (%s, %s, NOW())",
+                        "INSERT INTO observaciones (detalle_observacion, hoja_vida_id, fecha, materia_id) VALUES (%s, %s, NOW(), %s)",
                         (
                             observacion,
                             hoja_vida,
+                            materia,
                         ),
                     )
                 conn.commit()
@@ -44,7 +47,7 @@ def index():
         conn = Database.get_connection()
         with conn.cursor(dictionary=True) as cursor:
             cursor.execute(
-                "SELECT o.id, detalle_observacion, fecha, CONCAT(m.nombre_materia, ' | ', hv.nombres, ' ' , hv.apellidos) as hoja_vida FROM observaciones o INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id INNER JOIN materias m ON hv.materia_id = m.id"
+                "SELECT o.id, detalle_observacion, fecha, CONCAT(m.nombre_materia, ' | ', hv.nombres, ' ' , hv.apellidos) as hoja_vida FROM observaciones o INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id INNER JOIN materias m ON o.materia_id = m.id"
             )
             observaciones = cursor.fetchall()
     except Exception as e:
@@ -53,7 +56,7 @@ def index():
     finally:
         conn.close()
     return render_template(
-        "observacion/index.html", observaciones=observaciones, hojas_vida=hojas_vida
+        "observacion/index.html", observaciones=observaciones, hojas_vida=hojas_vida, materias=materias
     )
 
 
@@ -61,18 +64,20 @@ def index():
 @observacion_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
     hojas_vida = get_hojas_vida()
+    materias = get_materias()
 
     if request.method == "POST":
         nuevo_nombre = request.form.get("observacion")
         hoja_vida = request.form.get("hoja_vida")
+        materia = request.form.get("materia")
 
         if nuevo_nombre:
             try:
                 conn = Database.get_connection()
                 with conn.cursor() as cursor:
                     cursor.execute(
-                        "UPDATE observaciones SET detalle_observacion = %s, hoja_vida_id = %s WHERE id = %s",
-                        (nuevo_nombre, hoja_vida, id),
+                        "UPDATE observaciones SET detalle_observacion = %s, hoja_vida_id = %s, materia_id = %s WHERE id = %s",
+                        (nuevo_nombre, hoja_vida, materia, id),
                     )
                 conn.commit()
                 flash("Observación actualizada exitosamente.", "success")
@@ -94,7 +99,7 @@ def editar(id):
     finally:
         conn.close()
     return render_template(
-        "observacion/update.html", observacion=observacion, hojas_vida=hojas_vida
+        "observacion/update.html", observacion=observacion, hojas_vida=hojas_vida, materias=materias
     )
 
 

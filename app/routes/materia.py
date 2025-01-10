@@ -94,9 +94,23 @@ def eliminar(id):
         with conn.cursor() as cursor:
             cursor.execute("DELETE FROM materias WHERE id = %s", (id,))
         conn.commit()
-        flash("Curso eliminado exitosamente.", "success")
+        flash("Materia eliminada exitosamente.", "success")
     except Exception as e:
-        flash(f"Error al eliminar el curso: {str(e)}", "danger")
+        error_message = str(e)
+        # Diccionario de mensajes para llaves foráneas
+        foreign_key_messages = {
+            "FK_logros_academicos_hojas_vida": "No se puede eliminar la materia porque está asociado a una hoja de vida. Por favor, primero cambie la materia a la hoja de vida.",
+            "FK_faltas_hojas_vida": "No se puede eliminar la materia porque está asociado a una hoja de vida. Por favor, primero cambie la materia a la hoja de vida.",
+        }
+
+        # Verificar si el error está relacionado con una llave foránea conocida
+        for key, message in foreign_key_messages.items():
+            if key in error_message:
+                flash(message, "danger")
+                break
+        else:
+            # Mensaje genérico para errores no específicos
+            flash(f"Error al eliminar la materia: {error_message}", "danger")
     finally:
         conn.close()
     return redirect(url_for("materia.index"))

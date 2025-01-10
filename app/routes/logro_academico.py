@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for, jsonify, send_file, session
 from ..database import Database
-from ..listados import get_hojas_vida
+from ..listados import get_hojas_vida, get_materias
 from xhtml2pdf import pisa
 import io
 
@@ -14,22 +14,25 @@ def index():
         return redirect(url_for("auth.login"))
     
     hojas_vida = get_hojas_vida()
+    materias = get_materias()
 
     if request.method == "POST":
         logro = request.form.get("logro")
         observacion = request.form.get("observacion")
         hoja_vida = request.form.get("hoja_vida")
+        materia = request.form.get("materia")
 
         if logro:
             try:
                 conn = Database.get_connection()
                 with conn.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO logros_academicos (logro, observacion, hoja_vida_id, fecha) VALUES (%s, %s, %s, NOW())",
+                        "INSERT INTO logros_academicos (logro, observacion, hoja_vida_id, fecha, materia_id) VALUES (%s, %s, %s, NOW(), %s)",
                         (
                             logro,
                             observacion,
                             hoja_vida,
+                            materia,
                         ),
                     )
                 conn.commit()
@@ -47,7 +50,7 @@ def index():
         conn = Database.get_connection()
         with conn.cursor(dictionary=True) as cursor:
             cursor.execute(
-                "SELECT o.id, logro, observacion, fecha, CONCAT(m.nombre_materia, ' | ', hv.nombres, ' ' , hv.apellidos) as hoja_vida FROM logros_academicos o INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id INNER JOIN materias m ON hv.materia_id = m.id"
+                "SELECT o.id, logro, observacion, fecha, CONCAT(m.nombre_materia, ' | ', hv.nombres, ' ' , hv.apellidos) as hoja_vida FROM logros_academicos o INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id INNER JOIN materias m ON o.materia_id = m.id"
             )
             logros_academicos = cursor.fetchall()
     except Exception as e:
@@ -56,7 +59,7 @@ def index():
     finally:
         conn.close()
     return render_template(
-        "logro_academico/index.html", logros_academicos=logros_academicos, hojas_vida=hojas_vida
+        "logro_academico/index.html", logros_academicos=logros_academicos, hojas_vida=hojas_vida, materias=materias
     )
 
 
@@ -64,19 +67,21 @@ def index():
 @logro_academico_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
     hojas_vida = get_hojas_vida()
+    materias = get_materias()
 
     if request.method == "POST":
         logro = request.form.get("logro")
         observacion = request.form.get("observacion")
         hoja_vida = request.form.get("hoja_vida")
+        materia = request.form.get("materia")
 
         if logro:
             try:
                 conn = Database.get_connection()
                 with conn.cursor() as cursor:
                     cursor.execute(
-                        "UPDATE logros_academicos SET logro = %s, observacion = %s, hoja_vida_id = %s WHERE id = %s",
-                        (logro, observacion, hoja_vida, id),
+                        "UPDATE logros_academicos SET logro = %s, observacion = %s, hoja_vida_id = %s, materia_id = %s WHERE id = %s",
+                        (logro, observacion, hoja_vida, materia, id),
                     )
                 conn.commit()
                 flash("Logro académico actualizado exitosamente.", "success")
@@ -98,7 +103,7 @@ def editar(id):
     finally:
         conn.close()
     return render_template(
-        "logro_academico/update.html", logro_academico=logro_academico, hojas_vida=hojas_vida
+        "logro_academico/update.html", logro_academico=logro_academico, hojas_vida=hojas_vida, materias=materias
     )
 
 
