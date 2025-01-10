@@ -182,15 +182,12 @@ def imprimir(id):
 
     # Validar datos obtenidos
     if not logros_academicos:
-        return (
-            jsonify(
-                {"error": "No se encontraron logros académicos para esta hoja de vida."}
-            ),
-            404,
-        )
+        flash("No se encontraron logros académicos para esta hoja de vida.", "warning")
+        return redirect(url_for("hoja_vida.index"))
 
     if not hoja_vida:
-        return jsonify({"error": "No se encontró la hoja de vida especificada."}), 404
+        flash("No se encontró la hoja de vida especificada.", "warning")
+        return redirect(url_for("hoja_vida.index"))
 
     # Renderizar la plantilla HTML
     try:
