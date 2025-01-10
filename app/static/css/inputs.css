@@ -129,3 +129,9 @@
     color: #0c5460;
     border: 1px solid #bee5eb;
 }
+
+.alert-warning {
+    background-color: #fffad7;
+    color: #c6ad0a;
+    border: 1px solid #c6ad0a;
+}

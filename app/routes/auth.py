@@ -1,11 +1,13 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..database import Database
+from .middleware import redirect_if_authenticated
 
 # Crear el Blueprint
 auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route("/", methods=["GET"])
+@redirect_if_authenticated
 def home():
     return render_template("auth/login.html")
 
@@ -44,6 +46,7 @@ def login():
     return render_template("auth/login.html")
 
 @auth_bp.route("/register", methods=["GET", "POST"])
+@redirect_if_authenticated
 def register():
     if request.method == "POST":
         # Obtener datos del formulario
@@ -84,7 +87,7 @@ def register():
 
     return render_template("auth/register.html")
 
-@auth_bp.route("/logout")
+@auth_bp.route("/logout", methods=["POST"])
 def logout():
     # Limpiar sesión
     session.clear()

@@ -68,6 +68,7 @@ tables = {
             inspector_piso_id INT DEFAULT NULL,
             psicologo_id INT DEFAULT NULL,
             materia_id INT NOT NULL,
+            representante VARCHAR(255) NOT NULL,
             FOREIGN KEY (jornada_id) REFERENCES jornadas(id) ON DELETE CASCADE,
             FOREIGN KEY (curso_id) REFERENCES cursos(id) ON DELETE CASCADE,
             FOREIGN KEY (docente_id) REFERENCES usuarios(id) ON DELETE CASCADE,
@@ -96,6 +97,18 @@ tables = {
         	INDEX `FK_logros_academicos_hojas_vida` (`hoja_vida_id`) USING BTREE,
         	CONSTRAINT `FK_logros_academicos_hojas_vida` FOREIGN KEY (`hoja_vida_id`) REFERENCES `hojas_vida` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION
         )
+    """,
+    "faltas": """
+        CREATE TABLE `faltas` (
+            `id` BIGINT UNSIGNED AUTO_INCREMENT NOT NULL,
+            `descripcion_falta` VARCHAR(255) NOT NULL DEFAULT '' COLLATE 'utf8mb4_0900_ai_ci',
+            `observacion` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8mb4_0900_ai_ci',
+            `fecha` DATE NULL DEFAULT NULL,
+            `hoja_vida_id` INT(10) NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            INDEX `FK_faltas_hojas_vida` (`hoja_vida_id`),
+            CONSTRAINT `FK_faltas_hojas_vida` FOREIGN KEY (`hoja_vida_id`) REFERENCES `hojas_vida` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+        );
     """,
 }
 

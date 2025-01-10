@@ -9,6 +9,7 @@ from .hoja_vida import hoja_vida_bp
 from .usuario import usuario_bp
 from .observacion import observacion_bp
 from .logro_academico import logro_academico_bp
+from .falta import falta_bp
 
 def register_blueprints(app):
     """Registrar todos los Blueprints en la aplicación Flask."""
@@ -20,3 +21,4 @@ def register_blueprints(app):
     app.register_blueprint(usuario_bp, url_prefix='/usuarios')
     app.register_blueprint(observacion_bp, url_prefix='/observaciones')
     app.register_blueprint(logro_academico_bp, url_prefix='/logros-academicos')
+    app.register_blueprint(falta_bp, url_prefix='/faltas')

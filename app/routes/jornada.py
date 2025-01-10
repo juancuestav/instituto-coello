@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for
+from flask import Blueprint, request, jsonify, render_template, flash, redirect, url_for, session
 from ..database import Database
 
 jornada_bp = Blueprint("jornada", __name__)
@@ -12,6 +12,10 @@ def get_jornada(id):
 # Página principal: muestra el formulario y el listado de jornadas
 @jornada_bp.route("/", methods=["GET", "POST"])
 def index():
+    if "user_id" not in session:
+        flash("Por favor, inicia sesión para acceder a esta página.", "warning")
+        return redirect(url_for("auth.login"))
+    
     if request.method == "POST":
         nombre_jornada = request.form.get("nombre_jornada")
         if nombre_jornada:

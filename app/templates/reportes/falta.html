@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faltas - Hoja de Vida</title>
+    <style>
+        /* Estilo general de la página */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            /* padding: 10px; */
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .observacion {
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+            /* margin-bottom: 20px; */
+        }
+
+        .observacion:last-child {
+            border-bottom: none;
+        }
+
+        .descripcion {
+            font-size: 16px;
+            color: #444;
+            /* line-height: 1.6; */
+        }
+
+        .fecha {
+            font-size: 14px;
+            color: #888;
+            /* margin-top: 10px; */
+            text-align: right;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 20px;
+        }
+
+        .info-table {
+            width: 50% !important;
+            border-collapse: collapse;
+        }
+
+        .info-table th,
+        .info-table td {
+            padding: 2px;
+            text-align: left;
+            border-bottom: 1px solid #fff;
+        }
+
+        .info-table th {
+            background-color: #fff;
+            font-size: 12px;
+        }
+
+        .info-table td {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .info-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .styled-table td,
+        .styled-table th {
+            border: 1px solid #000;
+            padding: 4px;
+        }
+
+        .bg-grey {
+            background-color: #f0f0f0;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <table class="info-table">
+            <tr class="text-bold">
+                <td align="center">
+                    <img src="{{ url_for('static', filename='images/logo.png', _external=True) }}"
+                        alt="Logo Colegio Instituto Coello" width="100px">
+                </td>
+                <td align="center" colspan="2" class="header-title">UNIDAD EDUCATIVA - PARTICULAR <br> INSTITUTO COELLO
+                    <br> HOJA DE REGISTRO DE FALTAS</td>
+                <td align="center">
+                    <img src="{{ url_for('static', filename='images/logo.png', _external=True) }}"
+                        alt="Logo Colegio Instituto Coello" width="100px">
+                </td>
+            </tr>
+        </table>
+
+        <table class="info-table">
+            <tr>
+                <th>ID</th>
+                <td>{{ hoja_vida['id'] }}</td>
+            </tr>
+            <tr>
+                <th>Cédula</th>
+                <td>{{ hoja_vida['cedula'] }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ hoja_vida['nombres'] }}</td>
+            </tr>
+            <tr>
+                <th>Apellidos</th>
+                <td>{{ hoja_vida['apellidos'] }}</td>
+            </tr>
+            <tr>
+                <th>Dirección</th>
+                <td>{{ hoja_vida['direccion'] }}</td>
+            </tr>
+            <tr>
+                <th>Teléfono</th>
+                <td>{{ hoja_vida['telefono'] }}</td>
+            </tr>
+            <tr>
+                <th>Correo Electrónico</th>
+                <td>{{ hoja_vida['email'] }}</td>
+            </tr>
+            <tr>
+                <th>Jornada</th>
+                <td>{{ hoja_vida['jornada'] }}</td>
+            </tr>
+            <tr>
+                <th>Curso</th>
+                <td>{{ hoja_vida['curso'] }}</td>
+            </tr>
+            <tr>
+                <th>Docente</th>
+                <td>{{ hoja_vida['docente'] }}</td>
+            </tr>
+            <tr>
+                <th>Psicólogo</th>
+                <td>{{ hoja_vida['psicologo'] }}</td>
+            </tr>
+            <tr>
+                <th>Inspector de piso</th>
+                <td>{{ hoja_vida['inspector_piso'] }}</td>
+            </tr>
+            <tr>
+                <th>Representante</th>
+                <td>{{ hoja_vida['representante'] }}</td>
+            </tr>
+        </table>
+        
+        <br>
+
+        <div class="text-bold">Listado de faltas</div>
+
+        <table class="styled-table">
+            <tr class="bg-grey">
+                <td class="text-bold">FECHA</td>
+                <td class="text-bold">DOCENTE</td>
+                <td class="text-bold">MATERIA</td>
+                <td class="text-bold">DESCRIPCIÓN DE LA FALTA</td>
+                <td class="text-bold">OBSERVACION</td>
+            </tr>
+            {% for falta in faltas %}
+            <tr>
+                <td>{{ falta['fecha'] }}</td>
+                <td>{{ falta['docente'] | upper }}</td>
+                <td>{{ falta['materia'] | upper }}</td>
+                <td>{{ falta['descripcion_falta'] | upper }}</td>
+                <td>{{ falta['observacion'] | upper }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="footer">
+            <p>Generado por el sistema de gestión de hojas de vida.</p>
+        </div>
+    </div>
+</body>
+
+</html>

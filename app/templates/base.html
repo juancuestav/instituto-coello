@@ -18,6 +18,14 @@
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
             <div class="school-name">Colegio Instituto Coello</div>
         </div>
+        <!-- Botón de cierre de sesión -->
+        <form action="/logout" method="POST" style="display: inline;">
+            <button type="submit" class="logout-button">
+                <i class="fa fa-sign-out"></i> Cerrar sesión
+            </button>
+        </form>
+        
+
         <div class="menu">
             <a href="{{ url_for('hoja_vida.index') }}"
                 class="menu-item {% if request.path == url_for('hoja_vida.index') %}active{% endif %}">
@@ -33,6 +41,11 @@
                 class="menu-item {% if request.path == url_for('logro_academico.index') %}active{% endif %}">
                 <i class="fas fa-star"></i>
                 Logros académicos
+            </a>
+            <a href="{{ url_for('falta.index') }}"
+                class="menu-item {% if request.path == url_for('falta.index') %}active{% endif %}">
+                <i class="fas fa-ban"></i>
+                Faltas
             </a>
             <a href="{{ url_for('materia.index') }}"
                 class="menu-item {% if request.path == url_for('materia.index') %}active{% endif %}">

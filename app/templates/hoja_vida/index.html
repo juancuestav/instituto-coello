@@ -223,6 +223,10 @@
                                     aria-label="Imprimir">
                                     <i class="fas fa-print"></i> <small>Logros</small>
                                 </a>
+                                <a href="{{ url_for('falta.imprimir', id=hoja['id']) }}" class="action-btn"
+                                    aria-label="Imprimir">
+                                    <i class="fas fa-print"></i> <small>Faltas</small>
+                                </a>
                                 <form action="{{ url_for('hoja_vida.eliminar', id=hoja['id']) }}" method="POST"
                                     style="display:inline;">
                                     <button type="submit" class="action-btn delete" aria-label="Eliminar">

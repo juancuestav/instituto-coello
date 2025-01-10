@@ -7,6 +7,7 @@ from flask import (
     flash,
     jsonify,
     send_file,
+    session,
 )
 from ..listados import (
     get_docentes,
@@ -81,6 +82,10 @@ def validar_formulario(form_data):
 
 @hoja_vida_bp.route("/", methods=["GET", "POST"])
 def index():
+    if "user_id" not in session:
+        flash("Por favor, inicia sesión para acceder a esta página.", "warning")
+        return redirect(url_for("auth.login"))
+
     datos_base = cargar_datos_base()
     hojas_vida = get_hojas_vida()
 
@@ -231,8 +236,41 @@ def editar(id):
     return render_template("hoja_vida/update.html", hoja_vida=hoja_vida, **datos_base)
 
 
-# Ruta para eliminar una hoja de vida
 @hoja_vida_bp.route("/eliminar/<int:id>", methods=["POST"])
+def eliminar(id):
+    try:
+        query = "DELETE FROM hojas_vida WHERE id = %s"
+        conn = Database.get_connection()
+        with conn.cursor() as cursor:
+            cursor.execute(query, (id,))
+        conn.commit()
+        flash(f"Hoja de vida con id {id} eliminada exitosamente.", "success")
+    except Exception as e:
+        error_message = str(e)
+        # Diccionario de mensajes para llaves foráneas
+        foreign_key_messages = {
+            "FK_faltas_hojas_vida": "No se puede eliminar la hoja de vida porque tiene faltas asociadas. Por favor, elimine primero las faltas relacionadas.",
+            "FK_logros_academicos_hojas_vida": "No se puede eliminar la hoja de vida porque tiene logros académicos asociados. Por favor, elimine primero los logros relacionados.",
+            "FK_observaciones_hojas_vida": "No se puede eliminar la hoja de vida porque tiene observaciones asociadas. Por favor, elimine primero las observaciones relacionadas.",
+        }
+
+        # Verificar si el error está relacionado con una llave foránea conocida
+        for key, message in foreign_key_messages.items():
+            if key in error_message:
+                flash(message, "danger")
+                break
+        else:
+            # Mensaje genérico para errores no específicos
+            flash(f"Error al eliminar la hoja de vida: {error_message}", "danger")
+    finally:
+        if conn:
+            conn.close()
+
+    return redirect(url_for("hoja_vida.index"))
+
+
+# Ruta para eliminar una hoja de vida
+""" @hoja_vida_bp.route("/eliminar/<int:id>", methods=["POST"])
 def eliminar(id):
     try:
         query = "DELETE FROM hojas_vida WHERE id = %s"
@@ -247,7 +285,7 @@ def eliminar(id):
         if conn:
             conn.close()
 
-    return redirect(url_for("hoja_vida.index"))
+    return redirect(url_for("hoja_vida.index")) """
 
 
 @hoja_vida_bp.route("/imprimir/<int:id>", methods=["GET"])
@@ -566,10 +604,10 @@ def recuperarId(tabla, campo_a_buscar, texto_a_buscar):
         # Validar nombres de tabla y columna
         if not tabla.isidentifier() or not campo_a_buscar.isidentifier():
             raise ValueError("Nombre de tabla o columna inválido.")
-        
+
         # Conexión a la base de datos
         conn = Database.get_connection()
-        
+
         with conn.cursor(dictionary=True) as cursor:
             # Consulta con LIMIT 1
             query = f"""

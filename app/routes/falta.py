@@ -4,10 +4,10 @@ from ..listados import get_hojas_vida
 from xhtml2pdf import pisa
 import io
 
-logro_academico_bp = Blueprint("logro_academico", __name__)
+falta_bp = Blueprint("falta", __name__)
 
 # Página principal: muestra el formulario y el listado de logro academico
-@logro_academico_bp.route("/", methods=["GET", "POST"])
+@falta_bp.route("/", methods=["GET", "POST"])
 def index():
     if "user_id" not in session:
         flash("Por favor, inicia sesión para acceder a esta página.", "warning")
@@ -16,121 +16,121 @@ def index():
     hojas_vida = get_hojas_vida()
 
     if request.method == "POST":
-        logro = request.form.get("logro")
+        descripcion_falta = request.form.get("descripcion_falta")
         observacion = request.form.get("observacion")
         hoja_vida = request.form.get("hoja_vida")
 
-        if logro:
+        if descripcion_falta:
             try:
                 conn = Database.get_connection()
                 with conn.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO logros_academicos (logro, observacion, hoja_vida_id, fecha) VALUES (%s, %s, %s, NOW())",
+                        "INSERT INTO faltas (descripcion_falta, observacion, hoja_vida_id, fecha) VALUES (%s, %s, %s, NOW())",
                         (
-                            logro,
+                            descripcion_falta,
                             observacion,
                             hoja_vida,
                         ),
                     )
                 conn.commit()
-                flash("Logro académico guardado exitosamente.", "success")
+                flash("Registro de falta guardado exitosamente.", "success")
             except Exception as e:
-                flash(f"Error al guardar el logro académico: {str(e)}", "danger")
+                flash(f"Error al guardar el registro de falta: {str(e)}", "danger")
             finally:
                 conn.close()
         else:
             flash("El campo de logro no puede estar vacío.", "warning")
-        return redirect(url_for("logro_academico.index"))
+        return redirect(url_for("falta.index"))
 
     # Consulta todos los logros existentes
     try:
         conn = Database.get_connection()
         with conn.cursor(dictionary=True) as cursor:
             cursor.execute(
-                "SELECT o.id, logro, observacion, fecha, CONCAT(m.nombre_materia, ' | ', hv.nombres, ' ' , hv.apellidos) as hoja_vida FROM logros_academicos o INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id INNER JOIN materias m ON hv.materia_id = m.id"
+                "SELECT o.id, descripcion_falta, observacion, fecha, CONCAT(m.nombre_materia, ' | ', hv.nombres, ' ' , hv.apellidos) as hoja_vida FROM faltas o INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id INNER JOIN materias m ON hv.materia_id = m.id"
             )
-            logros_academicos = cursor.fetchall()
+            faltas = cursor.fetchall()
     except Exception as e:
         flash(f"Error al obtener los logros académicos: {str(e)}", "danger")
-        logros_academicos = []
+        faltas = []
     finally:
         conn.close()
     return render_template(
-        "logro_academico/index.html", logros_academicos=logros_academicos, hojas_vida=hojas_vida
+        "falta/index.html", faltas=faltas, hojas_vida=hojas_vida
     )
 
 
-# Editar un logro academico
-@logro_academico_bp.route("/editar/<int:id>", methods=["GET", "POST"])
+# Editar una falta
+@falta_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
     hojas_vida = get_hojas_vida()
 
     if request.method == "POST":
-        logro = request.form.get("logro")
+        descripcion_falta = request.form.get("descripcion_falta")
         observacion = request.form.get("observacion")
         hoja_vida = request.form.get("hoja_vida")
 
-        if logro:
+        if descripcion_falta:
             try:
                 conn = Database.get_connection()
                 with conn.cursor() as cursor:
                     cursor.execute(
-                        "UPDATE logros_academicos SET logro = %s, observacion = %s, hoja_vida_id = %s WHERE id = %s",
-                        (logro, observacion, hoja_vida, id),
+                        "UPDATE faltas SET descripcion_falta = %s, observacion = %s, hoja_vida_id = %s WHERE id = %s",
+                        (descripcion_falta, observacion, hoja_vida, id),
                     )
                 conn.commit()
-                flash("Logro académico actualizado exitosamente.", "success")
+                flash("Registro de falta actualizado exitosamente.", "success")
             except Exception as e:
-                flash(f"Error al actualizar el logro académico: {str(e)}", "danger")
+                flash(f"Error al actualizar el registro de falta: {str(e)}", "danger")
             finally:
                 conn.close()
-            return redirect(url_for("logro_academico.index"))
+            return redirect(url_for("falta.index"))
 
-    # Recupera el logro academico actual
+    # Recupera la falta actual
     try:
         conn = Database.get_connection()
         with conn.cursor(dictionary=True) as cursor:
-            cursor.execute("SELECT * FROM logros_academicos WHERE id = %s", (id,))
-            logro_academico = cursor.fetchone()
+            cursor.execute("SELECT * FROM faltas WHERE id = %s", (id,))
+            falta = cursor.fetchone()
     except Exception as e:
-        flash(f"Error al obtener el logro académico: {str(e)}", "danger")
-        logro_academico = None
+        flash(f"Error al obtener el registro de falta: {str(e)}", "danger")
+        falta = None
     finally:
         conn.close()
     return render_template(
-        "logro_academico/update.html", logro_academico=logro_academico, hojas_vida=hojas_vida
+        "falta/update.html", falta=falta, hojas_vida=hojas_vida
     )
 
 
 # Eliminar un logro academico
-@logro_academico_bp.route("/eliminar/<int:id>", methods=["POST"])
+@falta_bp.route("/eliminar/<int:id>", methods=["POST"])
 def eliminar(id):
     try:
         conn = Database.get_connection()
         with conn.cursor() as cursor:
-            cursor.execute("DELETE FROM logros_academicos WHERE id = %s", (id,))
+            cursor.execute("DELETE FROM faltas WHERE id = %s", (id,))
         conn.commit()
-        flash("Logro académico eliminada exitosamente.", "success")
+        flash("Registro de falta eliminado exitosamente.", "success")
     except Exception as e:
-        flash(f"Error al eliminar el logro académico: {str(e)}", "danger")
+        flash(f"Error al eliminar el registro de falta: {str(e)}", "danger")
     finally:
         conn.close()
-    return redirect(url_for("logro_academico.index"))
+    return redirect(url_for("falta.index"))
 
-@logro_academico_bp.route("/imprimir/<int:id>", methods=["GET"])
+@falta_bp.route("/imprimir/<int:id>", methods=["GET"])
 def imprimir(id):
     try:
         # Obtener observaciones y hoja de vida de la base de datos
         conn = Database.get_connection()
         cursor = conn.cursor(dictionary=True)
 
-        # Obtener logros academicos
+        # Obtener faltas
         query = """
             SELECT 
             la.*,
             m.nombre_materia as materia,
             u.nombre as docente
-            FROM logros_academicos la 
+            FROM faltas la 
             INNER JOIN hojas_vida hv ON la.hoja_vida_id = hv.id 
             INNER JOIN materias m ON hv.materia_id = m.id 
             INNER JOIN usuarios u ON hv.docente_id = u.id 
@@ -140,7 +140,7 @@ def imprimir(id):
             query,
             (id,),
         )
-        logros_academicos = cursor.fetchall()  # fetchall devuelve una lista de diccionarios
+        faltas = cursor.fetchall()  # fetchall devuelve una lista de diccionarios
 
         # Obtener hoja de vida
         query = """
@@ -152,6 +152,7 @@ def imprimir(id):
                 hv.direccion,
                 hv.telefono,
                 hv.email,
+                hv.representante,
                 d.nombre AS docente,
                 i.nombre AS inspector_piso,
                 p.nombre AS psicologo,
@@ -181,22 +182,19 @@ def imprimir(id):
             conn.close()
 
     # Validar datos obtenidos
-    if not logros_academicos:
-        return (
-            jsonify(
-                {"error": "No se encontraron logros académicos para esta hoja de vida."}
-            ),
-            404,
-        )
+    if not faltas:        
+        flash("No se encontraron registros de falta para esta hoja de vida.", "warning")
+        return redirect(url_for("hoja_vida.index"))
 
     if not hoja_vida:
-        return jsonify({"error": "No se encontró la hoja de vida especificada."}), 404
+        flash("No se encontró la hoja de vida especificada.", "warning")
+        return redirect(url_for("hoja_vida.index"))
 
     # Renderizar la plantilla HTML
     try:
         rendered_html = render_template(
-            "reportes/logro_academico.html",
-            logros_academicos=logros_academicos,
+            "reportes/falta.html",
+            faltas=faltas,
             hoja_id=id,
             hoja_vida=hoja_vida,
         )
@@ -216,5 +214,5 @@ def imprimir(id):
         pdf_buffer,
         mimetype="application/pdf",
         as_attachment=True,
-        download_name=f"hoja_vida_{id}_logros.pdf",
+        download_name=f"hoja_vida_{id}_faltas.pdf",
     )

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for
+from flask import Blueprint, request, render_template, flash, redirect, url_for, session
 from ..database import Database
 from ..listados import get_hojas_vida
 
@@ -8,6 +8,10 @@ observacion_bp = Blueprint("observacion", __name__)
 # Página principal: muestra el formulario y el listado de observacions
 @observacion_bp.route("/", methods=["GET", "POST"])
 def index():
+    if "user_id" not in session:
+        flash("Por favor, inicia sesión para acceder a esta página.", "warning")
+        return redirect(url_for("auth.login"))
+    
     hojas_vida = get_hojas_vida()
 
     if request.method == "POST":

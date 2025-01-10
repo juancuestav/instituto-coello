@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for
+from flask import Blueprint, request, render_template, flash, redirect, url_for, session
 from werkzeug.security import generate_password_hash
 from ..database import Database
 from ..listados import get_roles
@@ -9,6 +9,10 @@ usuario_bp = Blueprint("usuario", __name__)
 # Página principal: muestra el formulario y el listado de cursos
 @usuario_bp.route("/", methods=["GET", "POST"])
 def index():
+    if "user_id" not in session:
+        flash("Por favor, inicia sesión para acceder a esta página.", "warning")
+        return redirect(url_for("auth.login"))
+    
     roles = get_roles()  # Obtener la lista de roles para el formulario
 
     if request.method == "POST":
