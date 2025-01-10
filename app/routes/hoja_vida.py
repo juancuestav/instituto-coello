@@ -305,7 +305,7 @@ def imprimir(id):
             hv.representante
             FROM observaciones o 
             INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id 
-            INNER JOIN materias m ON hv.materia_id = m.id 
+            INNER JOIN materias m ON o.materia_id = m.id 
             INNER JOIN usuarios u ON hv.docente_id = u.id 
             INNER JOIN usuarios u2 ON hv.psicologo_id = u2.id 
             WHERE hoja_vida_id = %s

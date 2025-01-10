@@ -137,7 +137,7 @@ def imprimir(id):
             u.nombre as docente
             FROM logros_academicos la 
             INNER JOIN hojas_vida hv ON la.hoja_vida_id = hv.id 
-            INNER JOIN materias m ON hv.materia_id = m.id 
+            INNER JOIN materias m ON la.materia_id = m.id 
             INNER JOIN usuarios u ON hv.docente_id = u.id 
             WHERE hoja_vida_id = %s
         """
