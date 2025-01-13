@@ -22,6 +22,14 @@ def index():
             try:
                 conn = Database.get_connection()
                 with conn.cursor() as cursor:
+                    # Verificar si el correo ya está registrado
+                    cursor.execute("SELECT id FROM jornadas WHERE LOWER(nombre_jornada) LIKE %s", ("%" + nombre_jornada + "%",))
+                    existing_jornada = cursor.fetchone()
+
+                    if existing_jornada:
+                        flash("La jornada ya está registrada.", "danger")
+                        return redirect(url_for("jornada.index"))
+            
                     cursor.execute(
                         "INSERT INTO jornadas (nombre_jornada) VALUES (%s)", (nombre_jornada,)
                     )
