@@ -17,12 +17,14 @@
     <form method="POST">
         <div class="form-grid">
             <div class="input-group">
-                <input type="text" id="logro" name="descripcion_falta" placeholder="Descripción de la falta" value="{{ falta['descripcion_falta'] }}">
+                <input type="text" id="logro" name="descripcion_falta" placeholder="Descripción de la falta"
+                    value="{{ falta['descripcion_falta'] }}">
                 <i class="fas fa-microphone" onclick="startRecognition('descripcion_falta')"></i>
             </div>
 
             <div class="input-group">
-                <input type="text" id="observacion" name="observacion" placeholder="Observación" value="{{ falta['observacion'] }}">
+                <input type="text" id="observacion" name="observacion" placeholder="Observación"
+                    value="{{ falta['observacion'] }}">
                 <i class="fas fa-microphone" onclick="startRecognition('observacion')"></i>
             </div>
 
@@ -30,8 +32,22 @@
                 <select name="hoja_vida" id="hoja_vida" class="custom-select">
                     <option value="" disabled>Seleccione un hoja de vida...</option>
                     {% for hoja_vida in hojas_vida %}
-                    <option value="{{ hoja_vida['id'] }}" {% if hoja_vida['id']==(falta['hoja_vida_id']|int) %}selected{% endif %}>
-                        {{ hoja_vida['materia'] }} | {{hoja_vida['nombres']}} {{ hoja_vida['apellidos'] }}
+                    <option value="{{ hoja_vida['id'] }}" {% if hoja_vida['id']==(falta['hoja_vida_id']|int)
+                        %}selected{% endif %}>
+                        {{hoja_vida['nombres']}} {{ hoja_vida['apellidos'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="materia" id="materia" class="custom-select">
+                    <option value="" disabled>Seleccione una materia...</option>
+                    {% for materia in materias %}
+                    <option value="{{ materia['id'] }}" {% if materia['id']==falta['materia_id'] %}selected{% endif
+                        %}>
+                        {{ materia['nombre_materia'] }}
                     </option>
                     {% endfor %}
                 </select>

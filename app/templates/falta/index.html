@@ -17,7 +17,8 @@
     <form method="POST" action="{{ url_for('falta.index') }}">
         <div class="form-grid">
             <div class="input-group">
-                <input type="text" id="descripcion_falta" name="descripcion_falta" placeholder="Descripción de la falta">
+                <input type="text" id="descripcion_falta" name="descripcion_falta"
+                    placeholder="Descripción de la falta">
                 <i class="fas fa-microphone" onclick="startRecognition('descripcion_falta')"></i>
             </div>
 
@@ -32,7 +33,20 @@
                     {% for hoja_vida in hojas_vida %}
                     <option value="{{ hoja_vida['id'] }}" {% if hoja_vida['id']==(request.form.get('hoja_vida', ''
                         )|int) %}selected{% endif %}>
-                        {{ hoja_vida['materia'] }} | {{hoja_vida['nombres']}} {{ hoja_vida['apellidos'] }}
+                        {{hoja_vida['nombres']}} {{ hoja_vida['apellidos'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <i class="fas fa-microphone select-icon"></i>
+            </div>
+
+            <div class="select-container">
+                <select name="materia" id="materia" class="custom-select" required>
+                    <option value="" disabled>Seleccione una materia...</option>
+                    {% for materia in materias %}
+                    <option value="{{ materia['id'] }}" {% if materia['id']==(request.form.get('materia', '' )|int)
+                        %}selected{% endif %}>
+                        {{ materia['nombre_materia'] }}
                     </option>
                     {% endfor %}
                 </select>
@@ -86,7 +100,7 @@
                         <th>ID</th>
                         <th>Descripción de la falta</th>
                         <th>Observación</th>
-                        <th>Hoja de vida</th>
+                        <th>Materia | Hoja de vida</th>
                         <th>Fecha</th>
                         <th>Gestionar</th>
                     </tr>

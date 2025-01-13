@@ -115,7 +115,7 @@ def eliminar(id):
         with conn.cursor() as cursor:
             cursor.execute("DELETE FROM logros_academicos WHERE id = %s", (id,))
         conn.commit()
-        flash("Logro académico eliminada exitosamente.", "success")
+        flash("Logro académico eliminado exitosamente.", "success")
     except Exception as e:
         flash(f"Error al eliminar el logro académico: {str(e)}", "danger")
     finally:

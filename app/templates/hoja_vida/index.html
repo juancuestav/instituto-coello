@@ -17,7 +17,7 @@
     <form method="POST" action="{{ url_for('hoja_vida.index') }}">
         <div class="form-grid">
             <div class="input-group">
-                <input type="text" id="cedula" name="cedula" placeholder="Cédula"
+                <input type="text" id="cedula" name="cedula" placeholder="Cédula" maxlength="10"
                     value="{{ request.form.get('cedula', '') }}" required>
                 <i class="fas fa-microphone"></i>
             </div>
@@ -42,7 +42,7 @@
 
             <div class="input-group">
                 <input type="text" id="telefono" name="telefono" placeholder="Teléfono"
-                    value="{{ request.form.get('telefono', '') }}" required>
+                    value="{{ request.form.get('telefono', '') }}" required maxlength="10">
                 <i class="fas fa-microphone"></i>
             </div>
 

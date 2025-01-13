@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for, session
 from ..database import Database
-from ..listados import get_hojas_vida, get_materias
+from ..listados import get_hojas_vida, get_materias, recuperarId
+import re
 
 observacion_bp = Blueprint("observacion", __name__)
 
@@ -11,7 +12,7 @@ def index():
     if "user_id" not in session:
         flash("Por favor, inicia sesión para acceder a esta página.", "warning")
         return redirect(url_for("auth.login"))
-    
+
     hojas_vida = get_hojas_vida()
     materias = get_materias()
 
@@ -56,7 +57,10 @@ def index():
     finally:
         conn.close()
     return render_template(
-        "observacion/index.html", observaciones=observaciones, hojas_vida=hojas_vida, materias=materias
+        "observacion/index.html",
+        observaciones=observaciones,
+        hojas_vida=hojas_vida,
+        materias=materias,
     )
 
 
@@ -99,7 +103,10 @@ def editar(id):
     finally:
         conn.close()
     return render_template(
-        "observacion/update.html", observacion=observacion, hojas_vida=hojas_vida, materias=materias
+        "observacion/update.html",
+        observacion=observacion,
+        hojas_vida=hojas_vida,
+        materias=materias,
     )
 
 
@@ -117,3 +124,94 @@ def eliminar(id):
     finally:
         conn.close()
     return redirect(url_for("observacion.index"))
+
+
+def extraer_valores(frase):
+    # Buscar el patrón de cédula
+    observacion_match = re.search(r"observación (\w+)", frase)
+    observacion = observacion_match.group(1) if observacion_match else None 
+    
+    hoja_vida_match = re.search(r"hoja de vida ([\w\s]+)", frase)
+    hoja_vida = hoja_vida_match.group(1) if hoja_vida_match else None 
+    
+    materia_match = re.search(r"materia ([\w\s]+)", frase)
+    materia = materia_match.group(1) if materia_match else None 
+
+    return (
+        observacion,
+        hoja_vida,
+        materia,
+    )
+
+
+# Crear la consulta SQL
+def generar_consulta_sql(
+    observacion,
+    hoja_vida,
+    materia,
+):
+    condiciones = []
+    if observacion:
+        condiciones.append(f"LOWER(detalle_observacion) LIKE LOWER('%{observacion}%')")
+    if hoja_vida:
+        hoja_vida_id = recuperarId("hojas_vida", "nombres", hoja_vida)
+        condiciones.append(f"hoja_vida_id = '{hoja_vida_id}'")
+    if materia:
+        materia_id = recuperarId("materias", "nombre_materia", materia)
+        condiciones.append(f"o.materia_id = '{materia_id}'")
+
+    print("Condiciones")
+    print(condiciones)
+
+    if condiciones:
+        where_clause = " AND ".join(condiciones)
+        return f"""
+                SELECT o.id, detalle_observacion, fecha, CONCAT(m.nombre_materia, ' | ', hv.nombres, ' ' , hv.apellidos) as hoja_vida FROM observaciones o INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id INNER JOIN materias m ON o.materia_id = m.id
+                WHERE {where_clause};
+                """
+    else:
+        return "SELECT * FROM observaciones where id = -1;"
+
+
+@observacion_bp.route("/buscar", methods=["GET"])
+def buscar():
+    hojas_vida = get_hojas_vida()
+    materias = get_materias()
+
+    frase = request.args.get("frase")
+
+    # Extraer valores de la frase
+    (
+        observacion,
+        hoja_vida,
+        materia,
+    ) = extraer_valores(frase)
+    
+    print("Valores...")
+    print(observacion)
+    print(hoja_vida)
+    print(materia)
+
+    query = generar_consulta_sql(
+        observacion, hoja_vida, materia
+    )
+    
+    print('Voy a buscar...')
+    print(query)
+
+    conn = Database.get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(query)
+    row = cursor.fetchall()
+    # conn.close()
+    if cursor:
+        cursor.close()
+    if conn:
+        conn.close()
+
+    return render_template(
+        "observacion/index.html",
+        observaciones=row,
+        materias=materias,
+        hojas_vida=hojas_vida,
+    )

@@ -99,8 +99,11 @@ def eliminar(id):
         error_message = str(e)
         # Diccionario de mensajes para llaves foráneas
         foreign_key_messages = {
-            "FK_logros_academicos_hojas_vida": "No se puede eliminar la materia porque está asociado a una hoja de vida. Por favor, primero cambie la materia a la hoja de vida.",
-            "FK_faltas_hojas_vida": "No se puede eliminar la materia porque está asociado a una hoja de vida. Por favor, primero cambie la materia a la hoja de vida.",
+            "fk_logros_academicos_hojas_vida": "No se puede eliminar la materia porque está asociado a una hoja de vida. Por favor, primero cambie la materia a la hoja de vida.",
+            "fk_faltas_hojas_vida": "No se puede eliminar la materia porque está asociado a una hoja de vida. Por favor, primero cambie la materia a la hoja de vida.",
+            "fk_materia_logros": "No se puede eliminar la materia porque está asociado a un logro académico. Por favor, primero cambie la materia en el registro de logro académico.",
+            "fk_materias_faltas": "No se puede eliminar la materia porque está asociado a un registro de faltas. Por favor, primero cambie la materia en el registro de faltas.",
+            "fk_materia": "No se puede eliminar la materia porque está asociado a una observación. Por favor, primero cambie la materia en el registro de observación.",
         }
 
         # Verificar si el error está relacionado con una llave foránea conocida

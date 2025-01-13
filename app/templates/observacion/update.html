@@ -28,7 +28,7 @@
                     {% for hoja_vida in hojas_vida %}
                     <option value="{{ hoja_vida['id'] }}" {% if hoja_vida['id']==(observacion['hoja_vida_id']|int)
                         %}selected{% endif %}>
-                        {{ hoja_vida['materia'] }} | {{hoja_vida['nombres']}} {{ hoja_vida['apellidos'] }}
+                        {{hoja_vida['nombres']}} {{ hoja_vida['apellidos'] }}
                     </option>
                     {% endfor %}
                 </select>
@@ -39,8 +39,8 @@
                 <select name="materia" id="materia" class="custom-select">
                     <option value="" disabled>Seleccione una materia...</option>
                     {% for materia in materias %}
-                    <option value="{{ materia['id'] }}" {% if materia['id']==observacion['materia_id'] %}selected{% endif
-                        %}>
+                    <option value="{{ materia['id'] }}" {% if materia['id']==observacion['materia_id'] %}selected{%
+                        endif %}>
                         {{ materia['nombre_materia'] }}
                     </option>
                     {% endfor %}

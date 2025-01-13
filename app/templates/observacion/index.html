@@ -73,19 +73,31 @@
     <div>
         <br><br>
         <h2 class="text-title">Listado de observaciones</h2><br>
-        <div class="search-containers">
+        <form class="search-containers" method="GET" action="{{ url_for('observacion.buscar') }}">
+            <div class="input-group">
+                <input type="text" name="frase" class="search-input" placeholder="Buscar por medio de una frase">
+                <i class="fas fa-microphone select-icon"></i>
+                <button type="submit" class="btn btn-search">
+                    <span class="fas fa-search"></span> Buscar
+                </button>
+                <a href="{{ url_for('observacion.index') }}" class="btn btn-positive">
+                    <span class="fas fa-list"></span> Listar todo
+                </a>
+            </div>
+        </form>
+        <!-- <div class="search-containers">
             <div class="input-group">
                 <input type="text" id="frase" name="frase" class="search-input"
                     placeholder="Buscar por medio de una frase">
                 <i class="fas fa-microphone" onclick="startRecognition('frase')"></i>
             </div>
-        </div>
+        </div> -->
 
-        <div class="buttons">
+        <!-- <div class="buttons">
             <button class="btn btn-primary">
                 <i class="fas fa-search"></i> Buscar
             </button>
-        </div><br>
+        </div><br> -->
 
         <div class="table-container">
             <table>

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for, jsonify, send_file, session
 from ..database import Database
-from ..listados import get_hojas_vida
+from ..listados import get_hojas_vida, get_materias
 from xhtml2pdf import pisa
 import io
 
@@ -14,22 +14,25 @@ def index():
         return redirect(url_for("auth.login"))
     
     hojas_vida = get_hojas_vida()
+    materias = get_materias()
 
     if request.method == "POST":
         descripcion_falta = request.form.get("descripcion_falta")
         observacion = request.form.get("observacion")
         hoja_vida = request.form.get("hoja_vida")
+        materia = request.form.get("materia")
 
         if descripcion_falta:
             try:
                 conn = Database.get_connection()
                 with conn.cursor() as cursor:
                     cursor.execute(
-                        "INSERT INTO faltas (descripcion_falta, observacion, hoja_vida_id, fecha) VALUES (%s, %s, %s, NOW())",
+                        "INSERT INTO faltas (descripcion_falta, observacion, hoja_vida_id, fecha, materia_id) VALUES (%s, %s, %s, NOW(), %s)",
                         (
                             descripcion_falta,
                             observacion,
                             hoja_vida,
+                            materia,
                         ),
                     )
                 conn.commit()
@@ -39,7 +42,7 @@ def index():
             finally:
                 conn.close()
         else:
-            flash("El campo de logro no puede estar vacío.", "warning")
+            flash("El campo descripción de falta no puede estar vacío.", "warning")
         return redirect(url_for("falta.index"))
 
     # Consulta todos los logros existentes
@@ -47,7 +50,7 @@ def index():
         conn = Database.get_connection()
         with conn.cursor(dictionary=True) as cursor:
             cursor.execute(
-                "SELECT o.id, descripcion_falta, observacion, fecha, CONCAT(m.nombre_materia, ' | ', hv.nombres, ' ' , hv.apellidos) as hoja_vida FROM faltas o INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id INNER JOIN materias m ON hv.materia_id = m.id"
+                "SELECT o.id, descripcion_falta, observacion, fecha, CONCAT(m.nombre_materia, ' | ', hv.nombres, ' ' , hv.apellidos) as hoja_vida FROM faltas o INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id INNER JOIN materias m ON o.materia_id = m.id"
             )
             faltas = cursor.fetchall()
     except Exception as e:
@@ -56,7 +59,7 @@ def index():
     finally:
         conn.close()
     return render_template(
-        "falta/index.html", faltas=faltas, hojas_vida=hojas_vida
+        "falta/index.html", faltas=faltas, hojas_vida=hojas_vida, materias=materias
     )
 
 
@@ -64,19 +67,21 @@ def index():
 @falta_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
     hojas_vida = get_hojas_vida()
+    materias = get_materias()
 
     if request.method == "POST":
         descripcion_falta = request.form.get("descripcion_falta")
         observacion = request.form.get("observacion")
         hoja_vida = request.form.get("hoja_vida")
+        materia = request.form.get("materia")
 
         if descripcion_falta:
             try:
                 conn = Database.get_connection()
                 with conn.cursor() as cursor:
                     cursor.execute(
-                        "UPDATE faltas SET descripcion_falta = %s, observacion = %s, hoja_vida_id = %s WHERE id = %s",
-                        (descripcion_falta, observacion, hoja_vida, id),
+                        "UPDATE faltas SET descripcion_falta = %s, observacion = %s, hoja_vida_id = %s, materia_id = %s WHERE id = %s",
+                        (descripcion_falta, observacion, hoja_vida, materia, id),
                     )
                 conn.commit()
                 flash("Registro de falta actualizado exitosamente.", "success")
@@ -98,7 +103,7 @@ def editar(id):
     finally:
         conn.close()
     return render_template(
-        "falta/update.html", falta=falta, hojas_vida=hojas_vida
+        "falta/update.html", falta=falta, hojas_vida=hojas_vida, materias=materias
     )
 
 
@@ -132,7 +137,7 @@ def imprimir(id):
             u.nombre as docente
             FROM faltas la 
             INNER JOIN hojas_vida hv ON la.hoja_vida_id = hv.id 
-            INNER JOIN materias m ON hv.materia_id = m.id 
+            INNER JOIN materias m ON la.materia_id = m.id 
             INNER JOIN usuarios u ON hv.docente_id = u.id 
             WHERE hoja_vida_id = %s
         """

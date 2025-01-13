@@ -168,3 +168,63 @@ def get_hojas_vida():
         # Asegúrate de cerrar la conexión después de usarla
         if conn.is_connected():
             conn.close()
+
+def recuperarId(tabla, campo_a_buscar, texto_a_buscar):
+    try:
+        # Validar nombres de tabla y columna
+        if not tabla.isidentifier() or not campo_a_buscar.isidentifier():
+            raise ValueError("Nombre de tabla o columna inválido.")
+
+        # Conexión a la base de datos
+        conn = Database.get_connection()
+
+        with conn.cursor(dictionary=True) as cursor:
+            # Consulta con LIMIT 1
+            query = f"""
+                SELECT id FROM {tabla}
+                WHERE LOWER({campo_a_buscar}) LIKE LOWER(%s)
+                LIMIT 1
+            """
+            cursor.execute(query, ("%" + texto_a_buscar + "%",))
+            fila = cursor.fetchone()
+
+            if fila:
+                return fila["id"]
+            else:
+                return -1
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return -1
+
+    finally:
+        # Garantizar el cierre de conexión
+        if conn and conn.is_connected():
+            conn.close()
+
+    try:
+        conn = Database.get_connection()
+        with conn.cursor(dictionary=True) as cursor:
+            cursor.execute(
+                "SELECT * FROM "
+                + tabla
+                + " WHERE LOWER("
+                + campo_a_buscar
+                + ") LIKE LOWER(%s)",
+                ("%" + texto_a_buscar + "%",),
+            )
+            fila = cursor.fetchone()
+            cursor.close()
+            conn.close()
+
+            if not fila:
+                return -1
+            else:
+                return fila["id"]
+    except Exception as e:
+        return -1
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()

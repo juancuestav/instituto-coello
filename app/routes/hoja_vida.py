@@ -126,6 +126,14 @@ def index():
             """
             with Database.get_connection() as conn:
                 with conn.cursor() as cursor:
+                    # Verificar si el correo ya está registrado
+                    cursor.execute("SELECT id FROM hojas_vida WHERE email = %s", (form_data["email"],))
+                    existing_user = cursor.fetchone()
+
+                    if existing_user:
+                        flash("El correo ya está registrado.", "danger")
+                        return redirect(url_for("hoja_vida.index"))
+            
                     cursor.execute(
                         query,
                         (
