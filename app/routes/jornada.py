@@ -21,7 +21,7 @@ def index():
         if nombre_jornada:
             try:
                 conn = Database.get_connection()
-                with conn.cursor() as cursor:
+                with conn.cursor(buffered=True) as cursor:
                     # Verificar si el correo ya está registrado
                     cursor.execute("SELECT id FROM jornadas WHERE LOWER(nombre_jornada) LIKE %s", ("%" + nombre_jornada + "%",))
                     existing_jornada = cursor.fetchone()
@@ -65,7 +65,7 @@ def editar(id):
         if nuevo_nombre:
             try:
                 conn = Database.get_connection()
-                with conn.cursor() as cursor:
+                with conn.cursor(buffered=True) as cursor:
                     cursor.execute(
                         "UPDATE jornadas SET nombre_jornada = %s WHERE id = %s",
                         (nuevo_nombre, id),

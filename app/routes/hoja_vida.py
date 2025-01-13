@@ -135,13 +135,21 @@ def index():
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
             with Database.get_connection() as conn:
-                with conn.cursor() as cursor:
+                with conn.cursor(buffered=True) as cursor:
                     # Verificar si el correo ya está registrado
                     cursor.execute("SELECT id FROM hojas_vida WHERE email = %s", (form_data["email"],))
-                    existing_user = cursor.fetchone()
+                    existing_email = cursor.fetchone()
 
-                    if existing_user:
+                    if existing_email:
                         flash("El correo ya está registrado.", "danger")
+                        return redirect(url_for("hoja_vida.index"))
+                        
+                    # Verificar si el cedula ya está registrado
+                    cursor.execute("SELECT id FROM hojas_vida WHERE cedula = %s", (form_data["cedula"],))
+                    existing_cedula = cursor.fetchone()
+
+                    if existing_cedula:
+                        flash("La cédula ya está registrada.", "danger")
                         return redirect(url_for("hoja_vida.index"))
             
                     cursor.execute(
