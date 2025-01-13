@@ -17,7 +17,7 @@ def index():
         return redirect(url_for("auth.login"))
     
     if request.method == "POST":
-        nombre_materia = request.form.get("nombre_materia")
+        nombre_materia = request.form.get("nombre_materia").strip()
         if nombre_materia:
             try:
                 conn = Database.get_connection()
@@ -32,7 +32,7 @@ def index():
             finally:
                 conn.close()
         else:
-            flash("El campo de curso no puede estar vacío.", "warning")
+            flash("El campo de materia no puede estar vacío.", "warning")
         return redirect(url_for("materia.index"))
 
     # Consulta todos los materias existentes
@@ -53,7 +53,7 @@ def index():
 @materia_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
     if request.method == "POST":
-        nuevo_nombre = request.form.get("nombre_materia")
+        nuevo_nombre = request.form.get("nombre_materia").strip()
         if nuevo_nombre:
             try:
                 conn = Database.get_connection()
@@ -69,6 +69,8 @@ def editar(id):
             finally:
                 conn.close()
             return redirect(url_for("materia.index"))
+        else:
+            flash("El campo materia no puede estar vacío.", "warning")
 
     # Recupera el curso actual
     try:

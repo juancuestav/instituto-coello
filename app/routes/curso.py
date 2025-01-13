@@ -11,7 +11,7 @@ def index():
         return redirect(url_for("auth.login"))
     
     if request.method == "POST":
-        curso = request.form.get("curso")
+        curso = request.form.get("curso").strip()
         if curso:
             try:
                 conn = Database.get_connection()
@@ -47,7 +47,7 @@ def index():
 @curso_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
     if request.method == "POST":
-        nuevo_nombre = request.form.get("curso")
+        nuevo_nombre = request.form.get("curso").strip()
         if nuevo_nombre:
             try:
                 conn = Database.get_connection()
@@ -63,6 +63,8 @@ def editar(id):
             finally:
                 conn.close()
             return redirect(url_for("curso.index"))
+        else:
+            flash("El campo curso no puede estar vacío.", "warning")
 
     # Recupera el curso actual
     try:

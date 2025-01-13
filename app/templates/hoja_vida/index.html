@@ -17,48 +17,56 @@
     <form method="POST" action="{{ url_for('hoja_vida.index') }}">
         <div class="form-grid">
             <div class="input-group">
-                <input type="text" id="cedula" name="cedula" placeholder="Cédula" maxlength="10"
+                <span class="px-2">Cédula:</span>
+                <input type="text" id="cedula" name="cedula" placeholder="Ingrese la cédula" maxlength="10"
                     value="{{ request.form.get('cedula', '') }}" required>
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
-                <input type="text" id="nombres" name="nombres" placeholder="Nombres"
+                <span class="px-2">Nombres:</span>
+                <input type="text" id="nombres" name="nombres" placeholder="Ingrese los nombres"
                     value="{{ request.form.get('nombres', '') }}" required>
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
-                <input type="text" id="apellidos" name="apellidos" placeholder="Apellidos"
+                <span class="px-2">Apellidos:</span>
+                <input type="text" id="apellidos" name="apellidos" placeholder="Ingrese los apellidos"
                     value="{{ request.form.get('apellidos', '') }}" required>
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
-                <input type="text" id="direccion" name="direccion" placeholder="Dirección"
+                <span class="px-2">Dirección:</span>
+                <input type="text" id="direccion" name="direccion" placeholder="Ingrese la dirección"
                     value="{{ request.form.get('direccion', '') }}" required>
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Teléfono:</span>
                 <input type="text" id="telefono" name="telefono" placeholder="Teléfono"
                     value="{{ request.form.get('telefono', '') }}" required maxlength="10">
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Email:</span>
                 <input type="email" id="email" name="email" placeholder="Email"
                     value="{{ request.form.get('email', '') }}" required>
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Representante:</span>
                 <input type="text" id="representante" name="representante" placeholder="Representante"
                     value="{{ request.form.get('representante', '') }}" required>
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Docente:</span>
                 <select name="docente" id="docente" class="custom-select" required>
                     <option value="" disabled>Seleccione un docente...</option>
                     {% for docente in docentes %}
@@ -72,6 +80,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Inspector:</span>
                 <select name="inspector_piso" id="inspector_piso" class="custom-select" required>
                     <option value="" disabled>Seleccione un inspector de piso...</option>
                     {% for inspector in inspectores_piso %}
@@ -85,6 +94,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Psicólogo:</span>
                 <select name="psicologo" id="psicologo" class="custom-select" required>
                     <option value="" disabled>Seleccione un psicologo...</option>
                     {% for psicologo in psicologos %}
@@ -98,6 +108,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Materia:</span>
                 <select name="materia" id="materia" class="custom-select" required>
                     <option value="" disabled>Seleccione una materia...</option>
                     {% for materia in materias %}
@@ -111,6 +122,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Curso:</span>
                 <select name="curso" id="curso" class="custom-select" required>
                     <option value="" disabled>Seleccione una curso...</option>
                     {% for curso in cursos %}
@@ -124,6 +136,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Jornada:</span>
                 <select name="jornada" id="jornada" class="custom-select" required>
                     <option value="" disabled>Seleccione una jornada...</option>
                     {% for jornada in jornadas %}

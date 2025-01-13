@@ -17,7 +17,7 @@ def index():
         return redirect(url_for("auth.login"))
     
     if request.method == "POST":
-        nombre_jornada = request.form.get("nombre_jornada")
+        nombre_jornada = request.form.get("nombre_jornada").strip()
         if nombre_jornada:
             try:
                 conn = Database.get_connection()
@@ -32,7 +32,7 @@ def index():
             finally:
                 conn.close()
         else:
-            flash("El campo de curso no puede estar vacío.", "warning")
+            flash("El campo de nombre de jornada no puede estar vacío.", "warning")
         return redirect(url_for("jornada.index"))
 
     # Consulta todos los jornadas existentes
@@ -53,7 +53,7 @@ def index():
 @jornada_bp.route("/editar/<int:id>", methods=["GET", "POST"])
 def editar(id):
     if request.method == "POST":
-        nuevo_nombre = request.form.get("nombre_jornada")
+        nuevo_nombre = request.form.get("nombre_jornada").strip()
         if nuevo_nombre:
             try:
                 conn = Database.get_connection()
@@ -69,6 +69,8 @@ def editar(id):
             finally:
                 conn.close()
             return redirect(url_for("jornada.index"))
+        else:
+            flash("El campo de nombre de jornada no puede estar vacío.", "warning")
 
     # Recupera el curso actual
     try:

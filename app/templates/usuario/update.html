@@ -17,22 +17,26 @@
     <form method="POST">
         <div class="form-grid">
             <div class="input-group">
+                <span class="px-2">Nombre:</span>
                 <input type="text" name="nombre" id="nombre" placeholder="Nombre completo"
                     value="{{ usuario['nombre'] }}" required>
                 <i class="fas fa-microphone" onclick="startRecognition('nombre')"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Email:</span>
                 <input type="email" name="email" name="email" placeholder="Correo electrónico"
                     value="{{ usuario['email'] }}" required>
                 <i class="fas fa-microphone" onclick="startRecognition('email')"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Contraseña:</span>
                 <input type="password" name="password" placeholder="Contraseña" value="{{ usuario['password'] }}">
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Rol:</span>
                 <select name="rol" id="rol" class="custom-select" required>
                     <option value="" disabled>Seleccione un rol...</option>
                     {% for rol in roles %}

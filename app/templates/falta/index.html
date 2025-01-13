@@ -17,17 +17,20 @@
     <form method="POST" action="{{ url_for('falta.index') }}">
         <div class="form-grid">
             <div class="input-group">
+                <span class="px-2">Falta:</span>
                 <input type="text" id="descripcion_falta" name="descripcion_falta"
                     placeholder="Descripción de la falta">
                 <i class="fas fa-microphone" onclick="startRecognition('descripcion_falta')"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Observación:</span>
                 <input type="text" id="observacion" name="observacion" placeholder="Observación">
                 <i class="fas fa-microphone" onclick="startRecognition('observacion')"></i>
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">H.vida:</span>
                 <select name="hoja_vida" id="hoja_vida" class="custom-select">
                     <option value="" disabled>Seleccione un hoja de vida...</option>
                     {% for hoja_vida in hojas_vida %}
@@ -41,6 +44,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Materia:</span>
                 <select name="materia" id="materia" class="custom-select" required>
                     <option value="" disabled>Seleccione una materia...</option>
                     {% for materia in materias %}

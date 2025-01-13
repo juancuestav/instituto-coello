@@ -17,7 +17,7 @@
     <form method="POST" action="{{ url_for('jornada.index') }}">
         <div class="form-grid">
             <div class="input-group">
-                <input type="text" id="nombre_jornada" name="nombre_jornada" placeholder="Nombre de la jornada">
+                <input type="text" id="nombre_jornada" name="nombre_jornada" placeholder="Nombre de la jornada" required>
                 <i class="fas fa-microphone" onclick="startRecognition('nombre_jornada')"></i>
             </div>
         </div>

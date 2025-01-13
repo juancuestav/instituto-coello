@@ -17,45 +17,53 @@
     <form method="POST">
         <div class="form-grid">
             <div class="input-group">
+                <span class="px-2">Cédula:</span>
                 <input type="text" id="cedula" name="cedula" placeholder="Cédula" value="{{ hoja_vida['cedula'] }}">
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Nombres:</span>
                 <input type="text" id="nombres" name="nombres" placeholder="Nombres" value="{{ hoja_vida['nombres'] }}">
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Apellidos:</span>
                 <input type="text" id="apellidos" name="apellidos" placeholder="Apellidos"
                     value="{{ hoja_vida['apellidos'] }}">
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Dirección:</span>
                 <input type="text" id="direccion" name="direccion" placeholder="Dirección"
                     value="{{ hoja_vida['direccion'] }}">
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Teléfono:</span>
                 <input type="text" id="telefono" name="telefono" placeholder="Teléfono"
                     value="{{ hoja_vida['telefono'] }}">
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Email:</span>
                 <input type="email" id="email" name="email" placeholder="Email" value="{{ hoja_vida['email'] }}">
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="input-group">
+                <span class="px-2">Representante:</span>
                 <input type="text" id="representante" name="representante" placeholder="Representante"
                     value="{{ hoja_vida['representante'] }}" required>
                 <i class="fas fa-microphone"></i>
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Docente:</span>
                 <select name="docente" id="docente" class="custom-select">
                     <option value="" disabled>Seleccione un docente...</option>
                     {% for docente in docentes %}
@@ -69,6 +77,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Inspector:</span>
                 <select name="inspector_piso" id="inspector_piso" class="custom-select">
                     <option value="" disabled>Seleccione un inspector de piso...</option>
                     {% for inspector in inspectores_piso %}
@@ -82,6 +91,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Psicólogo:</span>
                 <select name="psicologo" id="psicologo" class="custom-select">
                     <option value="" disabled>Seleccione un psicologo...</option>
                     {% for psicologo in psicologos %}
@@ -95,6 +105,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Materia:</span>
                 <select name="materia" id="materia" class="custom-select">
                     <option value="" disabled>Seleccione una materia...</option>
                     {% for materia in materias %}
@@ -108,6 +119,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Curso:</span>
                 <select name="curso" id="curso" class="custom-select">
                     <option value="" disabled>Seleccione un curso...</option>
                     {% for curso in cursos %}
@@ -120,6 +132,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Jornada:</span>
                 <select name="jornada" id="jornada" class="custom-select">
                     <option value="" disabled>Seleccione una jornada...</option>
                     {% for jornada in jornadas %}

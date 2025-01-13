@@ -12,15 +12,20 @@ def index():
     if "user_id" not in session:
         flash("Por favor, inicia sesión para acceder a esta página.", "warning")
         return redirect(url_for("auth.login"))
-    
+
     roles = get_roles()  # Obtener la lista de roles para el formulario
 
     if request.method == "POST":
         # Obtener datos del formulario
-        nombre = request.form.get("nombre")
-        email = request.form.get("email")
+        nombre = request.form.get("nombre").strip()
+        email = request.form.get("email").strip()
         password = request.form.get("password")
         rol = request.form.get("rol")  # ID del rol seleccionado
+
+        # Validación de campos obligatorios
+        if not nombre:
+            flash("El campo nombre es obligtorio.", "warning")
+            return redirect(url_for("usuario.index"))
 
         try:
             # Conexión a la base de datos

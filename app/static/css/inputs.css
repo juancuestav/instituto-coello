@@ -21,6 +21,11 @@
     cursor: pointer;
 }
 
+.input-group span:first-child {
+    font-size: 14px;
+    font-weight: bold;
+}
+
 .input-group input {
     /* border: 1px solid #ddd; */
     border: none;
@@ -134,4 +139,23 @@
     background-color: #fffad7;
     color: #c6ad0a;
     border: 1px solid #c6ad0a;
+}
+
+.px-2 {
+    padding: 0 16px;
+}
+
+.text-primary {
+    color: #007bff;
+}
+
+.bg-light {
+    background-color: #f3f3f3;
+}
+
+.input-label {
+    padding: 10px 16px;
+    border-radius: 6px 0 0 6px;
+    font-size: 14px;
+    font-weight: bold;
 }

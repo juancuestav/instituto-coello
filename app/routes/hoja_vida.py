@@ -76,6 +76,16 @@ def validar_formulario(form_data):
         errores.append(
             "El correo electrónico debe contener un '@' y al menos un punto ('.') en el dominio."
         )
+        
+    # Validación de nombres
+    nombres = form_data.get("nombres", "")
+    if not nombres.replace(" ", "").isalpha():
+        errores.append("El campo 'nombres' solo puede contener letras y espacios.")
+        
+    # Validación de nombres
+    apellidos = form_data.get("apellidos", "")
+    if not apellidos.replace(" ", "").isalpha():
+        errores.append("El campo 'apellidos' solo puede contener letras y espacios.")
 
     return errores
 

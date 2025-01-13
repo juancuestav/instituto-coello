@@ -17,12 +17,14 @@
     <form method="POST">
         <div class="form-grid">
             <div class="input-group">
+                <span class="px-2">Observación:</span>
                 <input type="text" id="observacion" name="observacion" placeholder="Observación"
                     value="{{ observacion['detalle_observacion'] }}">
                 <i class="fas fa-microphone" onclick="startRecognition('observacion')"></i>
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">H.vida:</span>
                 <select name="hoja_vida" id="hoja_vida" class="custom-select">
                     <option value="" disabled>Seleccione un hoja de vida...</option>
                     {% for hoja_vida in hojas_vida %}
@@ -36,6 +38,7 @@
             </div>
 
             <div class="select-container">
+                <span class="px-2 bg-light input-label">Materia:</span>
                 <select name="materia" id="materia" class="custom-select">
                     <option value="" disabled>Seleccione una materia...</option>
                     {% for materia in materias %}
