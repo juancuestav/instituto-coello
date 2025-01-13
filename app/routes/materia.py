@@ -33,7 +33,7 @@ def index():
                         "INSERT INTO materias (nombre_materia) VALUES (%s)", (nombre_materia,)
                     )
                 conn.commit()
-                flash("Curso guardado exitosamente.", "success")
+                flash("Materia guardada exitosamente.", "success")
             except Exception as e:
                 flash(f"Error al guardar el curso: {str(e)}", "danger")
             finally:
