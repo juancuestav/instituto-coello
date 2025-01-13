@@ -21,7 +21,14 @@ def index():
         if nombre_materia:
             try:
                 conn = Database.get_connection()
-                with conn.cursor() as cursor:
+                with conn.cursor(buffered=True) as cursor:
+                    cursor.execute("SELECT id FROM materias WHERE LOWER(nombre_materia) LIKE %s", ("%" + nombre_materia + "%",))
+                    existing_materia = cursor.fetchone()
+
+                    if existing_materia:
+                        flash("La materia ya está registrada.", "danger")
+                        return redirect(url_for("materia.index"))
+                    
                     cursor.execute(
                         "INSERT INTO materias (nombre_materia) VALUES (%s)", (nombre_materia,)
                     )

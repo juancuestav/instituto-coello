@@ -15,7 +15,14 @@ def index():
         if curso:
             try:
                 conn = Database.get_connection()
-                with conn.cursor() as cursor:
+                with conn.cursor(buffered=True) as cursor:
+                    cursor.execute("SELECT id FROM cursos WHERE LOWER(nombre_curso) LIKE %s", ("%" + curso + "%",))
+                    existing_curso = cursor.fetchone()
+
+                    if existing_curso:
+                        flash("El curso ya está registrado.", "danger")
+                        return redirect(url_for("curso.index"))
+                    
                     cursor.execute(
                         "INSERT INTO cursos (nombre_curso) VALUES (%s)", (curso,)
                     )
@@ -51,7 +58,7 @@ def editar(id):
         if nuevo_nombre:
             try:
                 conn = Database.get_connection()
-                with conn.cursor() as cursor:
+                with conn.cursor() as cursor:                    
                     cursor.execute(
                         "UPDATE cursos SET nombre_curso = %s WHERE id = %s",
                         (nuevo_nombre, id),

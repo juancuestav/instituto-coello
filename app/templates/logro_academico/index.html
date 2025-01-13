@@ -82,19 +82,18 @@
     <div>
         <br><br>
         <h2 class="text-title">Listado de logros académicos</h2><br>
-        <div class="search-containers">
+        <form class="search-containers" method="GET" action="{{ url_for('logro_academico.buscar') }}">
             <div class="input-group">
-                <input type="text" id="frase" name="frase" class="search-input"
-                    placeholder="Buscar por medio de una frase">
-                <i class="fas fa-microphone" onclick="startRecognition('frase')"></i>
+                <input type="text" name="frase" class="search-input" placeholder="Buscar por medio de una frase">
+                <i class="fas fa-microphone select-icon"></i>
+                <button type="submit" class="btn btn-search">
+                    <span class="fas fa-search"></span> Buscar
+                </button>
+                <a href="{{ url_for('logro_academico.index') }}" class="btn btn-positive">
+                    <span class="fas fa-list"></span> Listar todo
+                </a>
             </div>
-        </div>
-
-        <div class="buttons">
-            <button class="btn btn-primary">
-                <i class="fas fa-search"></i> Buscar
-            </button>
-        </div><br>
+        </form>
 
         <div class="table-container">
             <table>

@@ -1,8 +1,9 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for, jsonify, send_file, session
 from ..database import Database
-from ..listados import get_hojas_vida, get_materias
+from ..listados import get_hojas_vida, get_materias, recuperarId
 from xhtml2pdf import pisa
 import io
+import re
 
 falta_bp = Blueprint("falta", __name__)
 
@@ -220,4 +221,91 @@ def imprimir(id):
         mimetype="application/pdf",
         as_attachment=True,
         download_name=f"hoja_vida_{id}_faltas.pdf",
+    )
+    
+def extraer_valores(frase):
+    # Buscar el patrón de cédula
+    descripcion_falta_match = re.search(r"falta (\w+)", frase)
+    descripcion_falta = descripcion_falta_match.group(1) if descripcion_falta_match else None 
+    
+    observacion_match = re.search(r"observación (\w+)", frase)
+    observacion = observacion_match.group(1) if observacion_match else None 
+    
+    hoja_vida_match = re.search(r"hoja de vida ([\w\s]+)", frase)
+    hoja_vida = hoja_vida_match.group(1) if hoja_vida_match else None 
+    
+    materia_match = re.search(r"materia ([\w\s]+)", frase)
+    materia = materia_match.group(1) if materia_match else None 
+
+    return (
+        descripcion_falta,
+        observacion,
+        hoja_vida,
+        materia,
+    )
+
+
+# Crear la consulta SQL
+def generar_consulta_sql(
+    descripcion_falta,
+    observacion,
+    hoja_vida,
+    materia,
+):
+    condiciones = []
+    if descripcion_falta:
+        condiciones.append(f"LOWER(descripcion_falta) LIKE LOWER('%{descripcion_falta}%')")
+    if observacion:
+        condiciones.append(f"LOWER(observacion) LIKE LOWER('%{observacion}%')")
+    if hoja_vida:
+        hoja_vida_id = recuperarId("hojas_vida", "nombres", hoja_vida)
+        condiciones.append(f"hoja_vida_id = '{hoja_vida_id}'")
+    if materia:
+        materia_id = recuperarId("materias", "nombre_materia", materia)
+        condiciones.append(f"o.materia_id = '{materia_id}'")
+
+    if condiciones:
+        where_clause = " AND ".join(condiciones)
+        return f"""
+                SELECT o.id, descripcion_falta, observacion, fecha, CONCAT(m.nombre_materia, ' | ', hv.nombres, ' ' , hv.apellidos) as hoja_vida FROM faltas o INNER JOIN hojas_vida hv ON o.hoja_vida_id = hv.id INNER JOIN materias m ON o.materia_id = m.id
+                WHERE {where_clause};
+                """
+    else:
+        return "SELECT * FROM faltas where id = -1;"
+
+
+@falta_bp.route("/buscar", methods=["GET"])
+def buscar():
+    hojas_vida = get_hojas_vida()
+    materias = get_materias()
+
+    frase = request.args.get("frase")
+
+    # Extraer valores de la frase
+    (
+        descripcion_falta,
+        observacion,
+        hoja_vida,
+        materia,
+    ) = extraer_valores(frase)
+
+    query = generar_consulta_sql(
+        descripcion_falta, observacion, hoja_vida, materia
+    )
+
+    conn = Database.get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(query)
+    row = cursor.fetchall()
+    # conn.close()
+    if cursor:
+        cursor.close()
+    if conn:
+        conn.close()
+
+    return render_template(
+        "falta/index.html",
+        faltas=row,
+        materias=materias,
+        hojas_vida=hojas_vida,
     )
